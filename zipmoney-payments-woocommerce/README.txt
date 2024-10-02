@@ -3,7 +3,7 @@ Contributors: Zip Co Limited
 Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, zipmoney woocommerce addon , zipmoney payment gateway for woocommerce, zipmoney for woocommerce, zipmoney payment gateway for wordpress, buy now pay later, zippay woocommerce plugin, Own it now, pay later, Zip Co, Zip
 Requires at least: WP 4.0
 Tested up to: 6.5
-Stable tag: 2.3.20
+Stable tag: 2.3.21
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -227,3 +227,6 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 
 = 2.3.20 =
 * fixed php notification issue for wc-zipmoney-checkout-js
+
+= 2.3.21 =
+* Change basic api endpoint

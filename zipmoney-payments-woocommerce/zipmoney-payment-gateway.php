@@ -6,7 +6,7 @@
  * Description:       Sell more online & in-store with Zip.
  * Give your customers the power to pay later, interest free and watch your sales grow.
  * Take advantage of our fast-growing customer base, proven revenue uplift, fast and simple integration.
- * Version:           2.3.20
+ * Version:           2.3.21
  * Author:            Zip
  * Author URI:        https://www.zip.co/
  * License:           GPL-2.0+
@@ -15,7 +15,7 @@
  * WC requires at least: 2.6.13
  * WC tested up to: 7.5.1
  *
- * @version  2.3.20
+ * @version  2.3.21
  * @package  Zip
  * @author   Zip
  */
@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 register_activation_hook( __FILE__, 'zip_plugin_activation' );
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-define( 'WOOCOMMERCE_GATEWAY_ZIPMONEY_VERSION', '2.3.20' );
+define( 'WOOCOMMERCE_GATEWAY_ZIPMONEY_VERSION', '2.3.21' );
 define( 'WOOCOMMERCE_GATEWAY_ZIPMONEY_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 define( 'WOOCOMMERCE_GATEWAY_ZIPMONEY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 /**
