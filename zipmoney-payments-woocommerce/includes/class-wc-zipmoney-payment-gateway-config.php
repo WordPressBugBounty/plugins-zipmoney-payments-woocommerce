@@ -33,7 +33,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	const CONFIG_PRODUCT                      = 'product';
 	const CONFIG_CHARGE_CAPTURE               = 'charge_capture';
 	const CONFIG_LOGGING_LEVEL                = 'log_level';
-	const CONFIG_IS_IFRAME_FLOW               = 'is_iframe_flow';
 	const CONFIG_DISPLAY_WIDGET               = 'display_widget';
 	const CONFIG_DISPLAY_WIDGET_MODE          = 'display_widget_mode';
 	const CONFIG_DISPLAY_WIDGET_PRODUCT_PAGE  = 'display_widget_product_page';
@@ -43,7 +42,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	const CONFIG_DISPLAY_BANNER_PRODUCT_PAGE  = 'display_banner_product_page';
 	const CONFIG_DISPLAY_BANNER_CATEGORY      = 'display_banner_category';
 	const CONFIG_DISPLAY_BANNER_CART          = 'display_banner_cart';
-	const CONFIG_DISPLAY_TAGLINE_PRODUCT_PAGE = 'display_tagline_product_page';
 	const CONFIG_DISPLAY_TAGLINE_CART         = 'display_tagline_cart';
 	const CONFIG_ORDER_THRESHOLD_MIN_TOTAL    = 'order_threshold_min_total';
 	const CONFIG_ORDER_THRESHOLD_MAX_TOTAL    = 'order_threshold_max_total';
@@ -66,13 +64,13 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	// region for zip widget
 	const REGION_AU = 'au';
 	const REGION_NZ = 'nz';
-	const REGION_GB = 'gb';
-	const REGION_ZA = 'za';
+//	const REGION_GB = 'gb';
+//	const REGION_ZA = 'za';
 	const REGION_US = 'us';
-	const REGION_MX = 'mx';
-	const REGION_SG = 'sg';
-	const REGION_CA = 'ca';
-	const REGION_AE = 'ae';
+//	const REGION_MX = 'mx';
+//	const REGION_SG = 'sg';
+//	const REGION_CA = 'ca';
+//	const REGION_AE = 'ae';
 
 	// Log levels
 	const LOG_LEVEL_ALL   = 1;
@@ -283,13 +281,13 @@ class WC_Zipmoney_Payment_Gateway_Config {
 				'default'  => self::REGION_AU,
 				'options'  => array(
 					self::REGION_AU => 'Australia',
-					self::REGION_CA => 'Canada',
-					self::REGION_MX => 'Mexico',
+//					self::REGION_CA => 'Canada',
+//					self::REGION_MX => 'Mexico',
 					self::REGION_NZ => 'New Zealand',
-					self::REGION_SG => 'Singapore',
-					self::REGION_ZA => 'South Africa',
-					self::REGION_AE => 'United Arab Emirates',
-					self::REGION_GB => 'United Kingdom',
+//					self::REGION_SG => 'Singapore',
+//					self::REGION_ZA => 'South Africa',
+//					self::REGION_AE => 'United Arab Emirates',
+//					self::REGION_GB => 'United Kingdom',
 					self::REGION_US => 'United States',
 				),
 			),
@@ -326,15 +324,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 					self::LOG_LEVEL_OFF   => __( 'Off (No message will be logged)', 'zippayment' ),
 				),
 			),
-			self::CONFIG_IS_IFRAME_FLOW               => array(
-				'title'       => __( 'In-context checkout', 'zippayment' ),
-				'label'       => __( 'Enable in-context checkout flow', 'zippayment' ),
-				'class'       => 'woocommerce_iframe_enable_option',
-				'type'        => 'checkbox',
-				'desc_tip'    => __( 'Enable to offer your customers an iframe checkout experience without being redirected away from your website. But this feature only work for AU region. Other region customer will redirect to zip for payment.', 'zippayment' ),
-				'description' => __( 'Iframe Zip checkout will only work for merchants based in Australia”', 'zippayment' ),
-				'default'     => 'no',
-			),
 			self::CONFIG_ORDER_THRESHOLD_MIN_TOTAL    => array(
 				'title'    => __( 'Minimum order value', 'zippayment' ),
 				'type'     => 'text',
@@ -369,13 +358,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 				'type'     => 'checkbox',
 				'desc_tip' => __( 'The cart widget will break down the price of the item and display a minimum weekly repayment or divide the price by 4 and show the customer an equal price breakdown', 'zippayment' ),
 				'default'  => 'yes',
-			),
-			self::CONFIG_DISPLAY_TAGLINE_PRODUCT_PAGE => array(
-				'title'    => __( 'Marketing taglines', 'zippayment' ),
-				'label'    => __( 'Display on product page', 'zippayment' ),
-				'desc_tip' => __( 'The tagline does not show any price breakdown or minimum repayments. A tagline will show a static message of "Own it now, pay later."', 'zippayment' ),
-				'type'     => 'checkbox',
-				'default'  => 'no',
 			),
 			self::CONFIG_DISPLAY_TAGLINE_CART         => array(
 				'label'    => __( 'Display on cart page', 'zippayment' ),
@@ -420,12 +402,7 @@ class WC_Zipmoney_Payment_Gateway_Config {
 
 	public function get_checkout_redirect_url() {
 		$url = get_home_url();
-
-		if ( $this->is_bool_config_by_key( self::CONFIG_IS_IFRAME_FLOW ) ) {
-			$url .= '/zipmoneypayment/expresscheckout/getredirecturl/';
-		} else {
-			$url .= '/zipmoneypayment/expresscheckout/';
-		}
+        $url .= '/zipmoneypayment/expresscheckout/';
 
 		if ( is_product() ) {
 			global $product;
@@ -542,8 +519,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 		$currency = get_option( 'woocommerce_currency' );
 		if ( $currency != CurrencyUtil::CURRENCY_AUD ) {
 			return false; // iframe checking is disable until we fix zip checkout js issue to support iframe for all browse
-		} else {
-			return $this->is_bool_config_by_key( self::CONFIG_IS_IFRAME_FLOW );
 		}
 	}
 }

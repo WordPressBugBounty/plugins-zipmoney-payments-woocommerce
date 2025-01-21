@@ -168,9 +168,6 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * @param WC_Zipmoney_Payment_Gateway_Config $WC_Zipmoney_Payment_Gateway_Config
 	 */
 	private function _add_tagline_hook( WC_Zipmoney_Payment_Gateway_Config $WC_Zipmoney_Payment_Gateway_Config ) {
-		if ( $WC_Zipmoney_Payment_Gateway_Config->is_bool_config_by_key( WC_Zipmoney_Payment_Gateway_Config::CONFIG_DISPLAY_TAGLINE_PRODUCT_PAGE ) ) {
-			add_action( 'woocommerce_single_product_summary', array( $this, 'render_tagline' ) );
-		}
 		if ( $WC_Zipmoney_Payment_Gateway_Config->is_bool_config_by_key( WC_Zipmoney_Payment_Gateway_Config::CONFIG_DISPLAY_TAGLINE_CART ) ) {
 			add_action( 'woocommerce_proceed_to_checkout', array( $this, 'render_tagline' ), 10 );
 		}
@@ -183,7 +180,8 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 */
 	public function render_widget_cart() {
 		$orderTotal = WC()->cart->get_cart_contents_total() + WC()->cart->get_shipping_total() + WC()->cart->get_taxes_total( false, false );
-		echo '<div class="widget-cart" data-zm-asset="cartwidget" zm-widget="popup"  data-zm-popup-asset="termsdialog" data-zm-price="' . $orderTotal . '" data-zm-symbol="' . get_woocommerce_currency_symbol() . '"></div>';
+        $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
+        echo '<div class="widget-cart" zm-region="' . $region . '" data-zm-asset="cartwidget" zm-widget="popup"  data-zm-popup-asset="termsdialog" data-zm-price="' . $orderTotal . '" data-zm-symbol="' . get_woocommerce_currency_symbol() . '"></div>';
 	}
 
 	/**
@@ -261,7 +259,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		wp_register_script( 'wc-zipmoney-script-order-button', esc_url( plugins_url( 'assets/js/zip_order_button.js', dirname( __FILE__ ) ) ), array( 'thickbox' ), '2.0.4', true );
 		wp_enqueue_script( 'wc-zipmoney-script-order-button' );
 
-		wp_register_script( 'wc-zipmoney-widget-js', 'https://static.zipmoney.com.au/lib/js/zm-widget-js/dist/zip-widget.min.js', '2.0.5', true );
+		wp_register_script( 'wc-zipmoney-widget-js', 'https://static.zip.co/lib/js/zm-widget-js/dist/zip-widget.min.js', '2.0.5', true );
 		wp_enqueue_script( 'wc-zipmoney-widget-js' );
 		$WC_Zipmoney_Payment_Gateway_Config = $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config;
 
@@ -282,9 +280,10 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		$product = wc_get_product();
 		if ( $product ) {
 			$price = $product->get_price();
-			echo '<div class="widget-product" data-zm-asset="productwidget" data-zm-widget="popup"  data-zm-popup-asset="termsdialog" data-zm-price="' . $price . '" data-zm-symbol="' . get_woocommerce_currency_symbol() . '"></div>';
-		}
-	}
+            $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
+			echo '<div class="widget-product" zm-region="'.$region.'"  data-zm-asset="productwidget" data-zm-widget="popup"  data-zm-popup-asset="termsdialog" data-zm-price="' . $price . '" data-zm-symbol="' . get_woocommerce_currency_symbol() . '"></div>';
+        }
+    }
 
 
 	/**
@@ -293,7 +292,8 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * @access public
 	 */
 	public function render_widget_general() {
-		echo '<div class="widget-product-cart" data-zm-asset="productwidget" data-zm-widget="popup"  data-zm-popup-asset="termsdialog"></div>';
+        $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
+		echo '<div class="widget-product-cart" zm-region="' .$region . '"  data-zm-asset="productwidget" data-zm-widget="popup"  data-zm-popup-asset="termsdialog"></div>';
 	}
 
 	/**
@@ -353,7 +353,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * Renders the widget below add to cart / proceed to checkout button in product or cart pages.
 	 */
 	public function render_tagline() {
-		echo '<div id="zip-tagline" data-zm-widget="tagline"  data-zm-info="true"></div>';
+        echo '<div id="zip-tagline" data-zm-widget="tagline"  data-zm-info="true"></div>';
 	}
 
 
@@ -363,8 +363,9 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * @access private
 	 */
 	private function _render_banner() {
-		 echo '<div class="zipmoney-strip-banner"  zm-asset="stripbanner"   zm-widget="popup"  zm-popup-asset="termsdialog" ></div>';
-	}
+        $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
+        echo '<div class="zipmoney-strip-banner" zm-region="' . $region . '" zm-asset="stripbanner"   zm-widget="popup"  zm-popup-asset="termsdialog" ></div>';
+    }
 
 	/**
 	 * Renders the element to store the merchant public key for widget to get content from API
@@ -373,7 +374,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		$region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
 		$min_limit = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_ORDER_THRESHOLD_MIN_TOTAL );
 		$max_limit = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_ORDER_THRESHOLD_MAX_TOTAL );
-		echo '<div data-zm-merchant="' . esc_attr( $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_merchant_public_key() ) . '" data-env="' .
+        echo '<div data-zm-merchant="' . esc_attr( $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_merchant_public_key() ) . '" data-env="' .
 			esc_attr( $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_environment() ) . '" data-require-checkout="false" data-zm-region="' . $region . '" data-zm-price-max="' . $max_limit . '" data-zm-price-min="' . $min_limit . '" data-zm-display-inline="' . $this->isDisplayInlineWidget() . '" data-zm-language="' . substr( get_locale(), 0, strpos( get_locale(), '_' ) ) . '"></div> ';
 	}
 
