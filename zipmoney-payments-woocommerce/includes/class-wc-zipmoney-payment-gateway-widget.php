@@ -25,9 +25,6 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		// add banner hook
 		$this->_add_banner_hook( $WC_Zipmoney_Payment_Gateway_Config );
 
-		// Tag line
-		$this->_add_tagline_hook( $WC_Zipmoney_Payment_Gateway_Config );
-
 		// Widget
 		$this->_add_widget_hook( $WC_Zipmoney_Payment_Gateway_Config );
 
@@ -51,9 +48,9 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		// add the notification section on checkout page
 		add_action( 'woocommerce_before_checkout_form', array( $this, 'add_zip_notification_section_on_checkout' ) );
 
-		// add defer to zip-widget js file
-		add_filter( 'script_loader_tag', array( $this, 'add_defer_to_script' ), 10, 3 );
-	}
+		// add async to zip-widget js file
+        add_filter( 'script_loader_tag', array( $this, 'add_async_to_script' ), 799, 3 );
+    }
 
 	public function add_zip_notification_section_on_checkout( $wccm_autocreate_account ) {
 		include plugin_dir_path( dirname( __FILE__ ) ) . 'includes/view/frontend/checkout_notification_section.php';
@@ -161,18 +158,6 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	// }
 	// }
 
-
-	/**
-	 * Add the tagline hook
-	 *
-	 * @param WC_Zipmoney_Payment_Gateway_Config $WC_Zipmoney_Payment_Gateway_Config
-	 */
-	private function _add_tagline_hook( WC_Zipmoney_Payment_Gateway_Config $WC_Zipmoney_Payment_Gateway_Config ) {
-		if ( $WC_Zipmoney_Payment_Gateway_Config->is_bool_config_by_key( WC_Zipmoney_Payment_Gateway_Config::CONFIG_DISPLAY_TAGLINE_CART ) ) {
-			add_action( 'woocommerce_proceed_to_checkout', array( $this, 'render_tagline' ), 10 );
-		}
-	}
-
 	/**
 	 * Renders the widget below add to cart / proceed to checkout button in product or cart pages.
 	 *
@@ -239,6 +224,16 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		return $tag;
 	}
 
+    /**
+     * add async to zip-widget.min.js
+     */
+    public function add_async_to_script( $tag, $handle, $src ) {
+        // You can use this to make it work as below for a specific script
+        if ( 'wc-zipmoney-widget-js' === $handle ) {
+            $tag = '<script type="text/javascript" async src="' . esc_url( $src ) . '"></script>';
+        }
+        return $tag;
+    }
 
 	/**
 	 * Register style and scripts required
@@ -370,15 +365,18 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	/**
 	 * Renders the element to store the merchant public key for widget to get content from API
 	 */
-	public function render_root_el() {
-		$region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
-		$min_limit = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_ORDER_THRESHOLD_MIN_TOTAL );
-		$max_limit = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_ORDER_THRESHOLD_MAX_TOTAL );
-        echo '<div data-zm-merchant="' . esc_attr( $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_merchant_public_key() ) . '" data-env="' .
-			esc_attr( $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_environment() ) . '" data-require-checkout="false" data-zm-region="' . $region . '" data-zm-price-max="' . $max_limit . '" data-zm-price-min="' . $min_limit . '" data-zm-display-inline="' . $this->isDisplayInlineWidget() . '" data-zm-language="' . substr( get_locale(), 0, strpos( get_locale(), '_' ) ) . '"></div> ';
-	}
+    public function render_root_el() {
+        if (is_checkout()) {
+            $region = $this->WC_Zipmoney_Payment_Gateway->get_option(WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION);
+            $min_limit = $this->WC_Zipmoney_Payment_Gateway->get_option(WC_Zipmoney_Payment_Gateway_Config::CONFIG_ORDER_THRESHOLD_MIN_TOTAL);
+            $max_limit = $this->WC_Zipmoney_Payment_Gateway->get_option(WC_Zipmoney_Payment_Gateway_Config::CONFIG_ORDER_THRESHOLD_MAX_TOTAL);
+            echo '<div data-zm-merchant="' . esc_attr($this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_merchant_public_key()) . '" data-env="' .
+                esc_attr($this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config->get_environment()) . '" data-require-checkout="false" data-zm-region="' . $region . '" data-zm-price-max="' . $max_limit . '" data-zm-price-min="' . $min_limit . '" data-zm-display-inline="' . $this->isDisplayInlineWidget() . '" data-zm-language="' . substr(get_locale(),
+                    0, strpos(get_locale(), '_')) . '"></div> ';
+        }
+    }
 
-	/**
+    /**
 	 * display product widget in line
 	 */
 	public function isDisplayInlineWidget() {

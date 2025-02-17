@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.3.18';
+	public $version = '2.3.23';
 
 	public $supports = array( 'products', 'refunds' );
 
@@ -72,7 +72,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 		add_action( 'admin_notices', array( $this, 'show_notices' ) );
 		add_filter( 'woocommerce_order_get_payment_method_title', array( $this, 'zip_order_payment_title' ), 10, 2 );
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_action_links' ) );
-		add_action( 'wp_footer', array( $this, 'update_zip_session' ) );
+		add_action( 'wp_footer', array( $this, 'update_zip_session' ), 99 );
 	}
 	// when zip private key is not valid then show this error in admin
 	public function invalid_key_error_notice( $display = false ) {
@@ -547,23 +547,25 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	/**
 	 * update session when customer check or uncheck Save Zip account in checkout page
 	 */
-	public function update_zip_session() {
-		$url = home_url();
-		?>
+    public function update_zip_session() {
+        if (is_checkout()) {
+            $url = home_url();
+            ?>
 
-		<script type="text/javascript">
-			function Check(value) {
-				let formData = new FormData();
-				var url = '<?php echo esc_url( $url ) . '/?p=zipmoneypayment&route=updatesession'; ?>';
-				formData.append("savezipaccount", value.checked);
-				const requestOptions = {
-					method: "POST",
-					body: formData
-				};
-				fetch(url, requestOptions)
-					.then(response => response.json());
-			};
-		</script>
-		<?php
-	}
+            <script type="text/javascript">
+              function Check(value) {
+                let formData = new FormData();
+                var url = '<?php echo esc_url($url) . '/?p=zipmoneypayment&route=updatesession'; ?>';
+                formData.append("savezipaccount", value.checked);
+                const requestOptions = {
+                  method: "POST",
+                  body: formData
+                };
+                fetch(url, requestOptions)
+                  .then(response => response.json());
+              };
+            </script>
+            <?php
+        }
+    }
 }

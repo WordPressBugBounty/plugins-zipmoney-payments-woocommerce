@@ -3,7 +3,7 @@ Contributors: Zip Co Limited
 Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, zipmoney woocommerce addon , zipmoney payment gateway for woocommerce, zipmoney for woocommerce, zipmoney payment gateway for wordpress, buy now pay later, zippay woocommerce plugin, Own it now, pay later, Zip Co, Zip
 Requires at least: WP 4.0
 Tested up to: 6.5
-Stable tag: 2.3.22
+Stable tag: 2.3.23
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -47,10 +47,10 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * __Log Setting__   - select the logging level.
 * __In-Context Checkout__   - check the box to enable iframe checkout which will enable in-context checkout process in a popup window without leaving the store.
 * __Minimum Order Value__  - set the minimum order amount to be used for zipMoney.
-* __Marketing Widgets__   - check the box to enable marketing images and buttons below the Add To Cart button in product page and below Process To Checkout  button in cart pages.  
+* __Marketing Widgets__   - check the box to enable marketing images and buttons below the Add To Cart button in product page and below Process To Checkout  button in cart pages.
   * __Display on product page__ -Enables widget in the product page below Add to Cart button.
   * __Display on cart page__ -Enables widget in the cart page below  Process To Checkout.
-* __Marketing Banners__   - check the box to enable marketing banners in different sections of the website.  
+* __Marketing Banners__   - check the box to enable marketing banners in different sections of the website.
   * __Display Marketing Banners__ -Displays other options to render the banners in shop, product , category and cart pages.
   * __Display on Shop__ -Enables banner in the Shop/Store page.
   * __Display on Product Page__ -Enables banner in Product page.
@@ -81,7 +81,7 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 = 1.0.8 =
 * Bug fix for missing shipping info in the order.
 = 2.0.0 =
-* This release contains a major change to the way plugin works. The aim is to reduce incomptabilities with other plugins during checkout. We have attempted to achieve this by using the default XHR route Woocomerce uses to do the checkout which would execute the hooks defined for the checkout process. 
+* This release contains a major change to the way plugin works. The aim is to reduce incomptabilities with other plugins during checkout. We have attempted to achieve this by using the default XHR route Woocomerce uses to do the checkout which would execute the hooks defined for the checkout process.
 * Fix for number of issues related to tax and rounding.
 * Fix for number of minor bugs and inconsistencies.
 = 2.0.1 =
@@ -137,7 +137,7 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * Fix return charge Uri.
 
 = 2.2.0 =
-* Fix woocommerce beackward compatibility. 
+* Fix woocommerce beackward compatibility.
 
 = 2.2.1 =
 * Fixed zip widget loading performance issue.
@@ -217,7 +217,7 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * Fixed active plugin issue
 
 = 2.3.16 =
-* Fixed some security related 
+* Fixed some security related
 
 = 2.3.17 =
 * Test plugin with wordpress 6.2 and woocommerce 7.5.1
@@ -231,5 +231,5 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 = 2.3.21 =
 * Changed an api endpoint
 
-= 2.3.22 = 
+= 2.3.22 =
 * Removed legacy changes. Updated region logic

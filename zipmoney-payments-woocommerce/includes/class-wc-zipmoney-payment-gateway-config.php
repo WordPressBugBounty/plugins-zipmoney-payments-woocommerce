@@ -42,7 +42,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	const CONFIG_DISPLAY_BANNER_PRODUCT_PAGE  = 'display_banner_product_page';
 	const CONFIG_DISPLAY_BANNER_CATEGORY      = 'display_banner_category';
 	const CONFIG_DISPLAY_BANNER_CART          = 'display_banner_cart';
-	const CONFIG_DISPLAY_TAGLINE_CART         = 'display_tagline_cart';
 	const CONFIG_ORDER_THRESHOLD_MIN_TOTAL    = 'order_threshold_min_total';
 	const CONFIG_ORDER_THRESHOLD_MAX_TOTAL    = 'order_threshold_max_total';
 	const CONFIG_SANDBOX_CREDENTIAL_BTN       = 'sandbox_btn';
@@ -358,12 +357,6 @@ class WC_Zipmoney_Payment_Gateway_Config {
 				'type'     => 'checkbox',
 				'desc_tip' => __( 'The cart widget will break down the price of the item and display a minimum weekly repayment or divide the price by 4 and show the customer an equal price breakdown', 'zippayment' ),
 				'default'  => 'yes',
-			),
-			self::CONFIG_DISPLAY_TAGLINE_CART         => array(
-				'label'    => __( 'Display on cart page', 'zippayment' ),
-				'desc_tip' => __( 'The tagline does not show any price breakdown or minimum repayments. A tagline will show a static message of "Own it now, pay later".', 'zippayment' ),
-				'type'     => 'checkbox',
-				'default'  => 'no',
 			),
 			self::CONFIG_DISPLAY_BANNERS              => array(
 				'title'    => __( 'Marketing banners', 'zippayment' ),
