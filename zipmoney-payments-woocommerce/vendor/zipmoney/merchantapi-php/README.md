@@ -5,7 +5,7 @@ ZipMoney Merchant API Initial build
 
 ## Requirements
 
-PHP 5.3 and later
+PHP 7.3 and later
 
 ## Installation & Usage
 ### Composer
@@ -142,6 +142,6 @@ Class | Method | HTTP request | Description
 
 ## Author
 
-
-
-
+For php 5.6 version use tag 1.0.11
+For php 7.0 version use tag 1.0.13
+For php 7.1 version use tag 1.0.14

@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
+
 /**
- * CurrencyUtil
+ * CurrencyUtil.
  *
  * @category Class
  * @package  zip
@@ -9,56 +11,31 @@
 
 namespace zipMoney\Model;
 
-class CurrencyUtil {
+class CurrencyUtil
+{
+    // allowed currency codes
+    public const CURRENCY_AUD = 'AUD';
+    public const CURRENCY_NZD = 'NZD';
+    public const CURRENCY_GBP = 'GBP';
+    public const CURRENCY_USD = 'USD';
+    public const CURRENCY_ZAR = 'ZAR';
+    public const CURRENCY_CAD = 'CAD';
 
-	// allowed currency codes
-	const CURRENCY_AUD = 'AUD';
-	const CURRENCY_NZD = 'NZD';
-	const CURRENCY_GBP = 'GBP';
-	const CURRENCY_USD = 'USD';
-	const CURRENCY_ZAR = 'ZAR';
-	const CURRENCY_CAD = 'CAD';
-	const CURRENCY_MXN = 'MXN';
-
-	/**
-	 * Gets allowable values of the enum
-	 *
-	 * @return string[]
-	 */
-	private static function getAllowedCurrencyList() {
-		return array(
-			self::CURRENCY_AUD,
-			self::CURRENCY_NZD,
-			self::CURRENCY_USD,
-			self::CURRENCY_GBP,
-			self::CURRENCY_ZAR,
-			self::CURRENCY_CAD,
-			self::CURRENCY_MXN,
-		);
-	}
-
-	public static function isValidCurrency( $currency ) {
-		$result         = array(
-			'valid'   => true,
-			'message' => '',
-		);
-		$allowed_values = self::getAllowedCurrencyList();
-		if ( ! in_array( $currency, $allowed_values ) ) {
-			$result['valid']   = false;
-			$result['message'] = "invalid value for 'currency', must be one of '" . implode( "','", $allowed_values ) . "'.";
-		}
-		return $result;
-	}
-
-	public static function getAvailableRegions() {
-		return array(
-			'au' => 'Australia',
-			'nz' => 'New Zealand',
-			'us' => 'United States',
-			'uk' => 'United Kingdom',
-			'za' => 'South Africa',
-			'ca' => 'Canada',
-			'mx' => 'Mexico',
-		);
-	}
+    /**
+     * Gets all available regions.
+     */
+    public static function getAvailableRegions()
+    {
+        return [
+            'au' => 'Australia',
+            'nz' => 'New Zealand',
+            'us' => 'United States',
+            'uk' => 'United Kingdom',
+            'za' => 'South Africa',
+            'ca' => 'Canada',
+            'mx' => 'Mexico',
+            'ae' => 'United Arab Emirates',
+            'sg' => 'Singapore',
+        ];
+    }
 }

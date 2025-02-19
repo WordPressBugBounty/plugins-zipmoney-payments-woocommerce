@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.3.23';
+	public $version = '2.3.24';
 
 	public $supports = array( 'products', 'refunds' );
 
