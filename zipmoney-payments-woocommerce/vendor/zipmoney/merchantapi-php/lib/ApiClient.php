@@ -1,8 +1,6 @@
 <?php
-declare(strict_types=1);
-
 /**
- * ApiClient.
+ * ApiClient
  *
  * @category Class
  * @package  zipMoney
@@ -12,367 +10,336 @@ declare(strict_types=1);
 
 namespace zipMoney;
 
-class ApiClient
-{
-    public static $PATCH = 'PATCH';
+class ApiClient {
 
-    public static $POST = 'POST';
+	public static $PATCH   = 'PATCH';
+	public static $POST    = 'POST';
+	public static $GET     = 'GET';
+	public static $HEAD    = 'HEAD';
+	public static $OPTIONS = 'OPTIONS';
+	public static $PUT     = 'PUT';
+	public static $DELETE  = 'DELETE';
 
-    public static $GET = 'GET';
+	/**
+	 * Configuration
+	 *
+	 * @var Configuration
+	 */
+	protected $config;
 
-    public static $HEAD = 'HEAD';
+	/**
+	 * Object Serializer
+	 *
+	 * @var ObjectSerializer
+	 */
+	protected $serializer;
 
-    public static $OPTIONS = 'OPTIONS';
+	/**
+	 * Constructor of the class
+	 *
+	 * @param Configuration $config config for this ApiClient
+	 */
+	public function __construct( \zipMoney\Configuration $config = null ) {
+		if ( $config === null ) {
+			$config = Configuration::getDefaultConfiguration();
+		}
 
-    public static $PUT = 'PUT';
+		$this->config = $config;
 
-    public static $DELETE = 'DELETE';
+		$this->config->setDefaultHeaders();
 
-    /**
-     * Configuration.
-     *
-     * @var Configuration
-     */
-    protected $config;
+		$this->serializer = new ObjectSerializer();
+	}
 
-    /**
-     * Object Serializer.
-     *
-     * @var ObjectSerializer
-     */
-    protected $serializer;
+	/**
+	 * Get the config
+	 *
+	 * @return Configuration
+	 */
+	public function getConfig() {
+		return $this->config;
+	}
 
-    /**
-     * Constructor of the class.
-     *
-     * @param Configuration $config config for this ApiClient
-     */
-    public function __construct(\zipMoney\Configuration $config = null)
-    {
-        if ($config === null) {
-            $config = Configuration::getDefaultConfiguration();
-        }
+	/**
+	 * Get the serializer
+	 *
+	 * @return ObjectSerializer
+	 */
+	public function getSerializer() {
+		return $this->serializer;
+	}
 
-        $this->config = $config;
+	/**
+	 * Get API key (with prefix if set)
+	 *
+	 * @param  string $apiKeyIdentifier name of apikey
+	 *
+	 * @return string API key with the prefix
+	 */
+	public function getApiKeyWithPrefix( $apiKeyIdentifier ) {
+		$prefix = $this->config->getApiKeyPrefix( $apiKeyIdentifier );
+		$apiKey = $this->config->getApiKey( $apiKeyIdentifier );
 
-        $this->config->setDefaultHeaders();
+		if ( ! isset( $apiKey ) ) {
+			return null;
+		}
 
-        $this->serializer = new ObjectSerializer();
-    }
+		if ( isset( $prefix ) ) {
+			$keyWithPrefix = $prefix . ' ' . $apiKey;
+		} else {
+			$keyWithPrefix = $apiKey;
+		}
 
-    /**
-     * Get the config.
-     *
-     * @return Configuration
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
+		return $keyWithPrefix;
+	}
 
-    /**
-     * Get the serializer.
-     *
-     * @return ObjectSerializer
-     */
-    public function getSerializer()
-    {
-        return $this->serializer;
-    }
+	/**
+	 * Make the HTTP call (Sync)
+	 *
+	 * @param string $resourcePath path to method endpoint
+	 * @param string $method       method to call
+	 * @param array  $queryParams  parameters to be place in query URL
+	 * @param array  $postData     parameters to be placed in POST body
+	 * @param array  $headerParams parameters to be place in request header
+	 * @param string $responseType expected response type of the endpoint
+	 * @param string $endpointPath path to method endpoint before expanding parameters
+	 *
+	 * @throws \zipMoney\ApiException on a non 2xx response
+	 * @return mixed
+	 */
+	public function callApi( $resourcePath, $method, $queryParams, $postData, $headerParams, $responseType = null, $endpointPath = null ) {
+		 $headers = array();
 
-    /**
-     * Get API key (with prefix if set).
-     *
-     * @param string $apiKeyIdentifier name of apikey
-     *
-     * @return string API key with the prefix
-     */
-    public function getApiKeyWithPrefix($apiKeyIdentifier)
-    {
-        $prefix = $this->config->getApiKeyPrefix($apiKeyIdentifier);
-        $apiKey = $this->config->getApiKey($apiKeyIdentifier);
+		// construct the http header
+		$headerParams = array_merge(
+			(array) $this->config->getDefaultHeaders(),
+			(array) $headerParams
+		);
 
-        if (!isset($apiKey)) {
-            return null;
-        }
+		foreach ( $headerParams as $key => $val ) {
+			$headers[] = "$key: $val";
+		}
 
-        if (isset($prefix)) {
-            $keyWithPrefix = $prefix . ' ' . $apiKey;
-        } else {
-            $keyWithPrefix = $apiKey;
-        }
+		// form data
+		if ( $postData and in_array( 'Content-Type: application/x-www-form-urlencoded', $headers, true ) ) {
+			$postData = http_build_query( $postData );
+		} elseif ( ( is_object( $postData ) or is_array( $postData ) ) and ! in_array( 'Content-Type: multipart/form-data', $headers, true ) ) { // json model
+			$postData = json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $postData ) );
+		}
 
-        return $keyWithPrefix;
-    }
+		$url = $this->config->getHost() . $resourcePath;
 
-    /**
-     * Make the HTTP call (Sync).
-     *
-     * @param string $resourcePath path to method endpoint
-     * @param string $method       method to call
-     * @param array  $queryParams  parameters to be place in query URL
-     * @param array  $postData     parameters to be placed in POST body
-     * @param array  $headerParams parameters to be place in request header
-     * @param string $responseType expected response type of the endpoint
-     * @param string $endpointPath path to method endpoint before expanding parameters
-     *
-     * @throws \zipMoney\ApiException on a non 2xx response
-     *
-     * @return mixed
-     */
-    public function callApi($resourcePath, $method, $queryParams, $postData, $headerParams, $responseType = null, $endpointPath = null)
-    {
-        $headers = [];
+		$curl = curl_init();
+		// set timeout, if needed
+		if ( $this->config->getCurlTimeout() !== 0 ) {
+			curl_setopt( $curl, CURLOPT_TIMEOUT, $this->config->getCurlTimeout() );
+		}
+		// set connect timeout, if needed
+		if ( $this->config->getCurlConnectTimeout() != 0 ) {
+			curl_setopt( $curl, CURLOPT_CONNECTTIMEOUT, $this->config->getCurlConnectTimeout() );
+		}
 
-        // construct the http header
-        $headerParams = array_merge(
-            (array) $this->config->getDefaultHeaders(),
-            (array) $headerParams
-        );
+		// return the result on success, rather than just true
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
 
-        foreach ($headerParams as $key => $val) {
-            $headers[] = "{$key}: {$val}";
-        }
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
 
-        // form data
-        if ($postData and in_array('Content-Type: application/x-www-form-urlencoded', $headers, true)) {
-            $postData = http_build_query($postData);
-        } elseif ((is_object($postData) or is_array($postData)) and !in_array('Content-Type: multipart/form-data', $headers, true)) { // json model
-            $postData = json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($postData));
-        }
+		// disable SSL verification, if needed
+		if ( $this->config->getSSLVerification() === false ) {
+			curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0 );
+			curl_setopt( $curl, CURLOPT_SSL_VERIFYHOST, 0 );
+		}
 
-        $url = $this->config->getHost() . $resourcePath;
+		if ( $this->config->getCurlProxyHost() ) {
+			curl_setopt( $curl, CURLOPT_PROXY, $this->config->getCurlProxyHost() );
+		}
 
-        $curl = curl_init();
-        // set timeout, if needed
-        if ($this->config->getCurlTimeout() !== 0) {
-            curl_setopt($curl, CURLOPT_TIMEOUT, $this->config->getCurlTimeout());
-        }
-        // set connect timeout, if needed
-        if ($this->config->getCurlConnectTimeout() != 0) {
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->config->getCurlConnectTimeout());
-        }
+		if ( $this->config->getCurlProxyPort() ) {
+			curl_setopt( $curl, CURLOPT_PROXYPORT, $this->config->getCurlProxyPort() );
+		}
 
-        // return the result on success, rather than just true
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		if ( $this->config->getCurlProxyType() ) {
+			curl_setopt( $curl, CURLOPT_PROXYTYPE, $this->config->getCurlProxyType() );
+		}
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		if ( $this->config->getCurlProxyUser() ) {
+			curl_setopt( $curl, CURLOPT_PROXYUSERPWD, $this->config->getCurlProxyUser() . ':' . $this->config->getCurlProxyPassword() );
+		}
 
-        // disable SSL verification, if needed
-        if ($this->config->getSSLVerification() === false) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-        }
+		if ( ! empty( $queryParams ) ) {
+			$url = ( $url . '?' . http_build_query( $queryParams ) );
+		}
 
-        if ($this->config->getCurlProxyHost()) {
-            curl_setopt($curl, CURLOPT_PROXY, $this->config->getCurlProxyHost());
-        }
+		if ( $method === self::$POST ) {
+			curl_setopt( $curl, CURLOPT_POST, true );
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $postData );
+		} elseif ( $method === self::$HEAD ) {
+			curl_setopt( $curl, CURLOPT_NOBODY, true );
+		} elseif ( $method === self::$OPTIONS ) {
+			curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'OPTIONS' );
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $postData );
+		} elseif ( $method === self::$PATCH ) {
+			curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'PATCH' );
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $postData );
+		} elseif ( $method === self::$PUT ) {
+			curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'PUT' );
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $postData );
+		} elseif ( $method === self::$DELETE ) {
+			curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'DELETE' );
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $postData );
+		} elseif ( $method !== self::$GET ) {
+			throw new ApiException( 'Method ' . $method . ' is not recognized.' );
+		}
+		curl_setopt( $curl, CURLOPT_URL, $url );
 
-        if ($this->config->getCurlProxyPort()) {
-            curl_setopt($curl, CURLOPT_PROXYPORT, $this->config->getCurlProxyPort());
-        }
+		// Set user agent
+		curl_setopt( $curl, CURLOPT_USERAGENT, $this->config->getUserAgent() );
 
-        if ($this->config->getCurlProxyType()) {
-            curl_setopt($curl, CURLOPT_PROXYTYPE, $this->config->getCurlProxyType());
-        }
+		// disable debugging for curl
+		curl_setopt( $curl, CURLOPT_VERBOSE, 0 );
 
-        if ($this->config->getCurlProxyUser()) {
-            curl_setopt($curl, CURLOPT_PROXYUSERPWD, $this->config->getCurlProxyUser() . ':' . $this->config->getCurlProxyPassword());
-        }
+		// obtain the HTTP response headers
+		curl_setopt( $curl, CURLOPT_HEADER, 1 );
 
-        if (!empty($queryParams)) {
-            $url = ($url . '?' . http_build_query($queryParams));
-        }
+		$num_retries = $this->config->getCurlNumRetries() ? $this->config->getCurlNumRetries() : 0;
+		$count       = 0;
 
-        if ($method === self::$POST) {
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } elseif ($method === self::$HEAD) {
-            curl_setopt($curl, CURLOPT_NOBODY, true);
-        } elseif ($method === self::$OPTIONS) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'OPTIONS');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } elseif ($method === self::$PATCH) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } elseif ($method === self::$PUT) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } elseif ($method === self::$DELETE) {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-        } elseif ($method !== self::$GET) {
-            throw new ApiException('Method ' . $method . ' is not recognized.');
-        }
-        curl_setopt($curl, CURLOPT_URL, $url);
+		do {
 
-        // Set user agent
-        curl_setopt($curl, CURLOPT_USERAGENT, $this->config->getUserAgent());
+			if ( $count > 0 && $this->config->getRetryInterval() > 0 ) {
+				sleep( $this->config->getRetryInterval() );
+			}
 
-        // disable debugging for curl
-        curl_setopt($curl, CURLOPT_VERBOSE, 0);
+			// Make the request
+			$response         = curl_exec( $curl );
+			$http_header_size = curl_getinfo( $curl, CURLINFO_HEADER_SIZE );
+			$http_header      = $this->httpParseHeaders( substr( $response, 0, $http_header_size ) );
+			$http_body        = substr( $response, $http_header_size );
+			$response_info    = curl_getinfo( $curl );
+			$count++;
+			$msg = curl_error( $curl );
 
-        // obtain the HTTP response headers
-        curl_setopt($curl, CURLOPT_HEADER, 1);
+		} while ( ( $count <= $num_retries ) &&
+				  ( $response_info['http_code'] === 0 && empty( $msg ) ) &&
+				  ! empty( $headerParams['Idempotency-Key'] ) );
 
-        $num_retries = $this->config->getCurlNumRetries() ? $this->config->getCurlNumRetries() : 0;
-        $count = 0;
+		// Handle the response
+		if ( $response_info['http_code'] === 0 ) {
+			$curl_error_message = curl_error( $curl );
 
-        do {
-            if ($count > 0 && $this->config->getRetryInterval() > 0) {
-                sleep($this->config->getRetryInterval());
-            }
+			// curl_exec can sometimes fail but still return a blank message from curl_error().
+			if ( ! empty( $curl_error_message ) ) {
+				$error_message = "API call to $url failed: $curl_error_message";
+			} else {
+				$error_message = "API call to $url failed, but for an unknown reason. " .
+					'This could happen if you are disconnected from the network.';
+			}
 
-            // Make the request
-            $response = curl_exec($curl);
-            $http_header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-            $http_header = $this->httpParseHeaders(substr($response, 0, $http_header_size));
-            $http_body = substr($response, $http_header_size);
-            $response_info = curl_getinfo($curl);
-            $count++;
-            $msg = curl_error($curl);
-        } while (($count <= $num_retries) &&
-                  ($response_info['http_code'] === 0 && empty($msg)) &&
-                  !empty($headerParams['Idempotency-Key']));
+			$exception = new ApiException( $error_message, 0, null, null );
+			$exception->setResponseObject( $response_info );
+			throw $exception;
+		} elseif ( $response_info['http_code'] >= 200 && $response_info['http_code'] <= 299 ) {
+			// return raw body if response is a file
+			if ( $responseType === '\SplFileObject' || $responseType === 'string' ) {
+				return array( $http_body, $response_info['http_code'], $http_header );
+			}
 
-        // Handle the response
-        if ($response_info['http_code'] === 0) {
-            $curl_error_message = curl_error($curl);
+			$data = json_decode( $http_body );
+			if ( json_last_error() > 0 ) { // if response is a string
+				$data = $http_body;
+			}
+		} else {
+			$data = json_decode( $http_body );
+			if ( json_last_error() > 0 ) { // if response is a string
+				$data = $http_body;
+			}
 
-            // curl_exec can sometimes fail but still return a blank message from curl_error().
-            if (!empty($curl_error_message)) {
-                $error_message = "API call to {$url} failed: {$curl_error_message}";
-            } else {
-                $error_message = "API call to {$url} failed, but for an unknown reason. " .
-                    'This could happen if you are disconnected from the network.';
-            }
+			throw new ApiException(
+				$this->generateErrorMessage( json_decode( $http_body ) ),
+				$response_info['http_code'],
+				$http_header,
+				$data
+			);
+		}
+		return array( $data, $response_info['http_code'], $http_header );
+	}
 
-            $exception = new ApiException($error_message, 0, null, null);
-            $exception->setResponseObject($response_info);
-            throw $exception;
-        }
-        if ($response_info['http_code'] >= 200 && $response_info['http_code'] <= 299) {
-            // return raw body if response is a file
-            if ($responseType === '\SplFileObject' || $responseType === 'string') {
-                return [$http_body, $response_info['http_code'], $http_header];
-            }
+	/**
+	 * Return the header 'Accept' based on an array of Accept provided
+	 *
+	 * @param string[] $accept Array of header
+	 *
+	 * @return string Accept (e.g. application/json)
+	 */
+	public function selectHeaderAccept( $accept ) {
+		if ( count( $accept ) === 0 || ( count( $accept ) === 1 && $accept[0] === '' ) ) {
+			return null;
+		} elseif ( preg_grep( '/application\/json/i', $accept ) ) {
+			return 'application/json';
+		} else {
+			return implode( ',', $accept );
+		}
+	}
 
-            $data = json_decode($http_body);
-            if (json_last_error() > 0) { // if response is a string
-                $data = $http_body;
-            }
-        } else {
-            $data = json_decode($http_body);
-            if (json_last_error() > 0) { // if response is a string
-                $data = $http_body;
-            }
+	/**
+	 * Return the content type based on an array of content-type provided
+	 *
+	 * @param string[] $content_type Array fo content-type
+	 *
+	 * @return string Content-Type (e.g. application/json)
+	 */
+	public function selectHeaderContentType( $content_type ) {
+		if ( count( $content_type ) === 0 || ( count( $content_type ) === 1 && $content_type[0] === '' ) ) {
+			return 'application/json';
+		} elseif ( preg_grep( '/application\/json/i', $content_type ) ) {
+			return 'application/json';
+		} else {
+			return implode( ',', $content_type );
+		}
+	}
 
-            throw new ApiException(
-                $this->generateErrorMessage(json_decode($http_body)),
-                $response_info['http_code'],
-                $http_header,
-                $data
-            );
-        }
+	/**
+	 * Return an array of HTTP response headers
+	 *
+	 * @param string $raw_headers A string of raw HTTP response headers
+	 *
+	 * @return string[] Array of HTTP response heaers
+	 */
+	protected function httpParseHeaders( $raw_headers ) {
+		// ref/credit: http://php.net/manual/en/function.http-parse-headers.php#112986
+		$headers = array();
 
-        return [$data, $response_info['http_code'], $http_header];
-    }
+		$header_text = substr( $raw_headers, 0, strpos( $raw_headers, "\r\n\r\n" ) );
 
-    /**
-     * Return the header 'Accept' based on an array of Accept provided.
-     *
-     * @param string[] $accept Array of header
-     *
-     * @return string Accept (e.g. application/json)
-     */
-    public function selectHeaderAccept($accept)
-    {
-        if (count($accept) === 0 or (count($accept) === 1 and $accept[0] === '')) {
-            return null;
-        }
-        if (preg_grep('/application\\/json/i', $accept)) {
-            return 'application/json';
-        }
+		foreach ( explode( "\r\n", $header_text ) as $i => $line ) {
+			if ( $i === 0 ) {
+				$headers['http_code'] = $line;
+			} else {
+				list ($key, $value) = explode( ': ', $line );
+				$headers[ $key ]    = $value;
+			}
+		}
 
-        return implode(',', $accept);
-    }
+		return $headers;
+	}
 
-    /**
-     * Return the content type based on an array of content-type provided.
-     *
-     * @param string[] $content_type Array fo content-type
-     *
-     * @return string Content-Type (e.g. application/json)
-     */
-    public function selectHeaderContentType($content_type)
-    {
-        if (count($content_type) === 0 or (count($content_type) === 1 and $content_type[0] === '')) {
-            return 'application/json';
-        }
-        if (preg_grep('/application\\/json/i', $content_type)) {
-            return 'application/json';
-        }
+	protected function generateErrorMessage( $response ) {
+		$errorMessage = 'An error occurred while processing payment';
 
-        return implode(',', $content_type);
-    }
+		if ( isset( $response->error ) ) {
+			if ( isset( $response->error->message ) ) {
+				$errorMessage = (string) $response->error->message;
+			}
 
-    /**
-     * Return an array of HTTP response headers.
-     *
-     * @param string $raw_headers A string of raw HTTP response headers
-     *
-     * @return string[] Array of HTTP response heaers
-     */
-    protected function httpParseHeaders($raw_headers)
-    {
-        // ref/credit: http://php.net/manual/en/function.http-parse-headers.php#112986
-        $headers = [];
-        $key = '';
+			if ( isset( $response->error->details ) ) {
+				$errorMessage = '';
 
-        foreach (explode("\n", $raw_headers) as $h) {
-            $h = explode(':', $h, 2);
+				foreach ( $response->error->details as $detail ) {
+					$errorMessage .= $detail->message;
+				}
+			}
+		}
 
-            if (isset($h[1])) {
-                if (!isset($headers[$h[0]])) {
-                    $headers[$h[0]] = trim($h[1]);
-                } elseif (is_array($headers[$h[0]])) {
-                    $headers[$h[0]] = array_merge($headers[$h[0]], [trim($h[1])]);
-                } else {
-                    $headers[$h[0]] = array_merge([$headers[$h[0]]], [trim($h[1])]);
-                }
-
-                $key = $h[0];
-            } else {
-                if (substr($h[0], 0, 1) === "\t") {
-                    $headers[$key] .= "\r\n\t" . trim($h[0]);
-                } elseif (!$key) {
-                    $headers[0] = trim($h[0]);
-                }
-                trim($h[0]);
-            }
-        }
-
-        return $headers;
-    }
-
-    protected function generateErrorMessage($response)
-    {
-        $errorMessage = 'An error occurred while processing payment';
-
-        if (isset($response->error)) {
-            if (isset($response->error->message)) {
-                $errorMessage = (string) $response->error->message;
-            }
-
-            if (isset($response->error->details)) {
-                $errorMessage = '';
-
-                foreach ($response->error->details as $detail) {
-                    $errorMessage .= $detail->message;
-                }
-            }
-        }
-
-        return $errorMessage;
-    }
+		return $errorMessage;
+	}
 }

@@ -1,111 +1,110 @@
 <?php
-declare(strict_types=1);
 /**
- * ChargesApiTest.
+ * ChargesApiTest
  *
  * @category Class
- *
- * @see     https://github.com/zipMoney/merchantapi-php
+ * @package  zipMoney
+ * @author   zipMoney Payments Pty Ltd
+ * @link     https://github.com/zipMoney/merchantapi-php
  */
 
 namespace zipMoney;
 
-use zipMoney\Api\ChargesApi;
-use zipMoney\Api\CheckoutsApi;
+use \zipMoney\Api\ChargesApi;
+use \zipMoney\Api\CheckoutsApi;
+use \zipMoney\Setup;
 
-class ChargesApiTest extends Setup
-{
-    /**
-     * Test case for chargesCancel.
-     *
-     * Cancel a charge.
-     *
-     * @expectedException  \zipMoney\ApiException
-     *
-     * @expectedExceptionMessage An error occurred while processing payment
-     */
-    public function testChargesCancel()
-    {
-        $chargesApi = new ChargesApi;
-        $response = $chargesApi->chargesCancel('1');
-    }
+class ChargesApiTest extends Setup {
 
-    /**
-     * Test case for chargesCapture.
-     *
-     * Capture a charge.
-     *
-     * @expectedException  \zipMoney\ApiException
-     *
-     * @expectedExceptionMessage An error occurred while processing payment
-     */
-    public function testChargesCapture()
-    {
-        $chargesApi = new ChargesApi;
-        $req = $this->_payloadHelper->getCapturePayload();
-        $response = $chargesApi->chargesCapture('1', $req);
-    }
+	/**
+	 * Setup before running any test cases
+	 */
+	public static function setUpBeforeClass() {     }
 
-    /**
-     * Test case for chargesCreate.
-     *
-     * Create a charge.
-     *
-     * @expectedException  \zipMoney\ApiException
-     *
-     * @expectedExceptionMessage An error occurred while processing payment
-     */
-    public function testChargesCreate()
-    {
-        $checkoutsApi = new CheckoutsApi;
-        $chargesApi = new ChargesApi;
+	/**
+	 * Clean up after running each test case
+	 */
+	public function tearDown() {    }
 
-        $req = $this->_payloadHelper->getCheckoutPayload();
-        $checkout = $checkoutsApi->checkoutsCreate($req);
+	/**
+	 * Clean up after running all test cases
+	 */
+	public static function tearDownAfterClass() {   }
 
-        $this->_payloadHelper->setCheckoutId($checkout->getId());
+	/**
+	 * Test case for chargesCancel
+	 *
+	 * Cancel a charge.
+	 *
+	 * @expectedException  \zipMoney\ApiException
+	 * @expectedExceptionMessage An error occurred while processing payment
+	 */
+	public function testChargesCancel() {
+		$chargesApi = new ChargesApi();
+		$response   = $chargesApi->chargesCancel( 1 );
+	}
 
-        $chargeReq = $this->_payloadHelper->getChargePayload();
-        $response = $chargesApi->chargesCreate($chargeReq);
+	/**
+	 * Test case for chargesCapture
+	 *
+	 * Capture a charge.
+	 *
+	 * @expectedException  \zipMoney\ApiException
+	 * @expectedExceptionMessage An error occurred while processing payment
+	 */
+	public function testChargesCapture() {
+		$chargesApi = new ChargesApi();
+		$req        = $this->_payloadHelper->getCapturePayload();
+		$response   = $chargesApi->chargesCapture( 1, $req );
+	}
 
-        $this->assertTrue(true);
-    }
+	/**
+	 * Test case for chargesCreate
+	 *
+	 * Create a charge.
+	 *
+	 * @expectedException  \zipMoney\ApiException
+	 * @expectedExceptionMessage An error occurred while processing payment
+	 */
 
-    /**
-     * Test case for chargesCreateRaisesException.
-     *
-     * Create a charge.
-     *
-     * @expectedException  \zipMoney\ApiException
-     *
-     * @expectedExceptionMessage An error occurred while processing payment
-     */
-    public function testChargesCreateRaisesException()
-    {
-        $chargesApi = new ChargesApi;
-        $chargeReq = $this->_payloadHelper->getChargePayload();
-        $response = $chargesApi->chargesCreate($chargeReq);
+	public function testChargesCreate() {
+		$checkoutsApi = new CheckoutsApi();
+		$chargesApi   = new ChargesApi();
 
-        $this->assertTrue(true);
-    }
+		$req      = $this->_payloadHelper->getCheckoutPayload();
+		$checkout = $checkoutsApi->checkoutsCreate( $req );
 
-    /**
-     * Test case for chargesList.
-     *
-     * List charges.
-     */
-    public function testChargesList()
-    {
-        $this->assertTrue(true);
-    }
+		$this->_payloadHelper->setCheckoutId( $checkout->getId() );
 
-    /**
-     * Test case for chargesRetrieve.
-     *
-     * Retrieve a charge.
-     */
-    public function testChargesRetrieve()
-    {
-        $this->assertTrue(true);
-    }
+		$chargeReq = $this->_payloadHelper->getChargePayload();
+		$response  = $chargesApi->chargesCreate( $chargeReq );
+	}
+
+	/**
+	 * Test case for chargesCreateRaisesException
+	 *
+	 * Create a charge.
+	 *
+	 * @expectedException  \zipMoney\ApiException
+	 * @expectedExceptionMessage An error occurred while processing payment
+	 */
+	public function testChargesCreateRaisesException() {
+		$chargesApi = new ChargesApi();
+		$chargeReq  = $this->_payloadHelper->getChargePayload();
+		$response   = $chargesApi->chargesCreate( $chargeReq );
+	}
+
+	/**
+	 * Test case for chargesList
+	 *
+	 * List charges.
+	 */
+	public function testChargesList() {     }
+
+	/**
+	 * Test case for chargesRetrieve
+	 *
+	 * Retrieve a charge.
+	 */
+	public function testChargesRetrieve() {     }
 }

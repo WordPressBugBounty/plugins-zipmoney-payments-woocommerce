@@ -1,8 +1,6 @@
 <?php
-declare(strict_types=1);
-
 /**
- * Authority.
+ * Authority
  *
  * @category Class
  * @package  zipMoney
@@ -10,275 +8,262 @@ declare(strict_types=1);
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 
+
 namespace zipMoney\Model;
 
-use ArrayAccess;
+use \ArrayAccess;
 
-class Authority implements ArrayAccess
-{
-    public const DISCRIMINATOR = 'subclass';
+class Authority implements ArrayAccess {
 
-    /**
-     * The original name of the model.
-     *
-     * @var string
-     */
-    protected static $swaggerModelName = 'authority';
+	const DISCRIMINATOR = 'subclass';
 
-    /**
-     * Array of property to type mappings. Used for (de)serialization.
-     *
-     * @var string[]
-     */
-    protected static $zipTypes = [
-        'type'  => 'string',
-        'value' => 'string',
-    ];
+	/**
+	 * The original name of the model.
+	 *
+	 * @var string
+	 */
+	protected static $swaggerModelName = 'authority';
 
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
+	/**
+	 * Array of property to type mappings. Used for (de)serialization
+	 *
+	 * @var string[]
+	 */
+	protected static $zipTypes = array(
+		'type'  => 'string',
+		'value' => 'string',
+	);
 
-    /**
-     * Array of attributes where the key is the local name, and the value is the original name.
-     *
-     * @var string[]
-     */
-    protected static $attributeMap = [
-        'type'  => 'type',
-        'value' => 'value',
-    ];
+	public static function zipTypes() {
+		 return self::$zipTypes;
+	}
 
-    /**
-     * Array of attributes to setter functions (for deserialization of responses).
-     *
-     * @var string[]
-     */
-    protected static $setters = [
-        'type'  => 'setType',
-        'value' => 'setValue',
-    ];
+	/**
+	 * Array of attributes where the key is the local name, and the value is the original name
+	 *
+	 * @var string[]
+	 */
+	protected static $attributeMap = array(
+		'type'  => 'type',
+		'value' => 'value',
+	);
 
-    /**
-     * Array of attributes to getter functions (for serialization of requests).
-     *
-     * @var string[]
-     */
-    protected static $getters = [
-        'type'  => 'getType',
-        'value' => 'getValue',
-    ];
 
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = array(
+		'type'  => 'setType',
+		'value' => 'setValue',
+	);
 
-    public static function setters()
-    {
-        return self::$setters;
-    }
 
-    public static function getters()
-    {
-        return self::$getters;
-    }
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = array(
+		'type'  => 'getType',
+		'value' => 'getValue',
+	);
 
-    public const TYPE_CHECKOUT_ID = 'checkout_id';
-    public const TYPE_STORE_CODE = 'store_code';
-    public const TYPE_ACCOUNT_TOKEN = 'account_token';
+	public static function attributeMap() {
+		 return self::$attributeMap;
+	}
 
-    /**
-     * Gets allowable values of the enum.
-     *
-     * @return string[]
-     */
-    public function getTypeAllowableValues()
-    {
-        return [
-            self::TYPE_CHECKOUT_ID,
-            self::TYPE_STORE_CODE,
-            self::TYPE_ACCOUNT_TOKEN,
-        ];
-    }
+	public static function setters() {
+		return self::$setters;
+	}
 
-    /**
-     * Associative array for storing property values.
-     *
-     * @var mixed[]
-     */
-    protected $container = [];
+	public static function getters() {
+		return self::$getters;
+	}
 
-    /**
-     * Constructor.
-     *
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['type'] = isset($data['type']) ? $data['type'] : null;
-        $this->container['value'] = isset($data['value']) ? $data['value'] : null;
-    }
+	const TYPE_CHECKOUT_ID   = 'checkout_id';
+	const TYPE_STORE_CODE    = 'store_code';
+	const TYPE_ACCOUNT_TOKEN = 'account_token';
 
-    /**
-     * show all the invalid properties with reasons.
-     *
-     * @return array invalid properties with reasons
-     */
-    public function listInvalidProperties()
-    {
-        $invalid_properties = [];
 
-        if ($this->container['type'] === null) {
-            $invalid_properties[] = "'type' can't be null";
-        }
-        $allowed_values = ['checkout_id', 'store_code', 'account_token'];
-        if (!in_array($this->container['type'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'type', must be one of 'checkout_id', 'store_code', 'account_token'.";
-        }
 
-        if ($this->container['value'] === null) {
-            $invalid_properties[] = "'value' can't be null";
-        }
+	/**
+	 * Gets allowable values of the enum
+	 *
+	 * @return string[]
+	 */
+	public function getTypeAllowableValues() {
+		return array(
+			self::TYPE_CHECKOUT_ID,
+			self::TYPE_STORE_CODE,
+			self::TYPE_ACCOUNT_TOKEN,
+		);
+	}
 
-        return $invalid_properties;
-    }
 
-    /**
-     * validate all the properties in the model
-     * return true if all passed.
-     *
-     * @return bool True if all properties are valid
-     */
-    public function valid()
-    {
-        if ($this->container['type'] === null) {
-            return false;
-        }
-        $allowed_values = ['checkout_id', 'store_code', 'account_token'];
-        if (!in_array($this->container['type'], $allowed_values)) {
-            return false;
-        }
-        if ($this->container['value'] === null) {
-            return false;
-        }
+	/**
+	 * Associative array for storing property values
+	 *
+	 * @var mixed[]
+	 */
+	protected $container = array();
 
-        return true;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[] $data Associated array of property values initializing the model
+	 */
+	public function __construct( array $data = null ) {
+		 $this->container['type'] = isset( $data['type'] ) ? $data['type'] : null;
+		$this->container['value'] = isset( $data['value'] ) ? $data['value'] : null;
+	}
 
-    /**
-     * Gets type.
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->container['type'];
-    }
+	/**
+	 * show all the invalid properties with reasons.
+	 *
+	 * @return array invalid properties with reasons
+	 */
+	public function listInvalidProperties() {
+		$invalid_properties = array();
 
-    /**
-     * Sets type.
-     *
-     * @param string $type The type of authority (checkout_id, account_token, store_code)
-     *
-     * @return $this
-     */
-    public function setType($type)
-    {
-        $allowed_values = ['checkout_id', 'store_code', 'account_token'];
-        if ((!in_array($type, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'type', must be one of 'checkout_id', 'store_code', 'account_token'");
-        }
-        $this->container['type'] = $type;
+		if ( $this->container['type'] === null ) {
+			$invalid_properties[] = "'type' can't be null";
+		}
+		$allowed_values = array( 'checkout_id', 'store_code', 'account_token' );
+		if ( ! in_array( $this->container['type'], $allowed_values ) ) {
+			$invalid_properties[] = "invalid value for 'type', must be one of 'checkout_id', 'store_code', 'account_token'.";
+		}
 
-        return $this;
-    }
+		if ( $this->container['value'] === null ) {
+			$invalid_properties[] = "'value' can't be null";
+		}
+		return $invalid_properties;
+	}
 
-    /**
-     * Gets value.
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->container['value'];
-    }
+	/**
+	 * validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		if ( $this->container['type'] === null ) {
+			return false;
+		}
+		$allowed_values = array( 'checkout_id', 'store_code', 'account_token' );
+		if ( ! in_array( $this->container['type'], $allowed_values ) ) {
+			return false;
+		}
+		if ( $this->container['value'] === null ) {
+			return false;
+		}
+		return true;
+	}
 
-    /**
-     * Sets value.
-     *
-     * @param string $value The authority value/token
-     *
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->container['value'] = $value;
 
-        return $this;
-    }
+	/**
+	 * Gets type
+	 *
+	 * @return string
+	 */
+	public function getType() {
+		 return $this->container['type'];
+	}
 
-    /**
-     * Returns true if offset exists. False otherwise.
-     *
-     * @param int $offset Offset
-     *
-     * @return bool
-     */
-    public function offsetExists($offset): bool
-    {
-        return isset($this->container[$offset]);
-    }
+	/**
+	 * Sets type
+	 *
+	 * @param string $type The type of authority (checkout_id, account_token, store_code)
+	 * @return $this
+	 */
+	public function setType( $type ) {
+		$allowed_values = array( 'checkout_id', 'store_code', 'account_token' );
+		if ( ( ! in_array( $type, $allowed_values ) ) ) {
+			throw new \InvalidArgumentException( "Invalid value for 'type', must be one of 'checkout_id', 'store_code', 'account_token'" );
+		}
+		$this->container['type'] = $type;
 
-    /**
-     * Gets offset.
-     *
-     * @param int $offset Offset
-     *
-     * @return mixed
-     */
-    public function offsetGet($offset): mixed
-    {
-        return $this->container[$offset] ?? null;
-    }
+		return $this;
+	}
 
-    /**
-     * Sets value based on offset.
-     *
-     * @param int   $offset Offset
-     * @param mixed $value  Value to be set
-     */
-    public function offsetSet($offset, $value): void
-    {
-        if (is_null($offset)) {
-            $this->container[] = $value;
-        } else {
-            $this->container[$offset] = $value;
-        }
-    }
+	/**
+	 * Gets value
+	 *
+	 * @return string
+	 */
+	public function getValue() {
+		return $this->container['value'];
+	}
 
-    /**
-     * Unsets offset.
-     *
-     * @param int $offset Offset
-     */
-    public function offsetUnset($offset): void
-    {
-        unset($this->container[$offset]);
-    }
+	/**
+	 * Sets value
+	 *
+	 * @param string $value The authority value/token
+	 * @return $this
+	 */
+	public function setValue( $value ) {
+		$this->container['value'] = $value;
 
-    /**
-     * Gets the string presentation of the object.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
-        }
+		return $this;
+	}
+	/**
+	 * Returns true if offset exists. False otherwise.
+	 *
+	 * @param  integer $offset Offset
+	 * @return boolean
+	 */
+	public function offsetExists( $offset ) {
+		return isset( $this->container[ $offset ] );
+	}
 
-        return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this));
-    }
+	/**
+	 * Gets offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @return mixed
+	 */
+	public function offsetGet( $offset ) {
+		return isset( $this->container[ $offset ] ) ? $this->container[ $offset ] : null;
+	}
+
+	/**
+	 * Sets value based on offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @param  mixed   $value  Value to be set
+	 * @return void
+	 */
+	public function offsetSet( $offset, $value ) {
+		if ( is_null( $offset ) ) {
+			$this->container[] = $value;
+		} else {
+			$this->container[ $offset ] = $value;
+		}
+	}
+
+	/**
+	 * Unsets offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @return void
+	 */
+	public function offsetUnset( $offset ) {
+		unset( $this->container[ $offset ] );
+	}
+
+	/**
+	 * Gets the string presentation of the object
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		if ( defined( 'JSON_PRETTY_PRINT' ) ) { // use JSON pretty print
+			return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ), JSON_PRETTY_PRINT );
+		}
+
+		return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ) );
+	}
 }
+
+

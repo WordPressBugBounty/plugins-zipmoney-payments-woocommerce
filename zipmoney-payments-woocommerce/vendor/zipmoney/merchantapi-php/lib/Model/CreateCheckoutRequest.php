@@ -1,8 +1,6 @@
 <?php
-declare(strict_types=1);
-
 /**
- * CreateCheckoutRequest.
+ * CreateCheckoutRequest
  *
  * @category Class
  * @package  zipMoney
@@ -10,389 +8,364 @@ declare(strict_types=1);
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 
+
 namespace zipMoney\Model;
 
-use ArrayAccess;
+use \ArrayAccess;
 
-class CreateCheckoutRequest implements ArrayAccess
-{
-    public const DISCRIMINATOR = 'subclass';
+class CreateCheckoutRequest implements ArrayAccess {
 
-    /**
-     * The original name of the model.
-     *
-     * @var string
-     */
-    protected static $swaggerModelName = 'CreateCheckoutRequest';
+	const DISCRIMINATOR = 'subclass';
 
-    /**
-     * Array of property to type mappings. Used for (de)serialization.
-     *
-     * @var string[]
-     */
-    protected static $zipTypes = [
-        'type'     => 'string',
-        'shopper'  => '\zipMoney\Model\Shopper',
-        'order'    => '\zipMoney\Model\CheckoutOrder',
-        'features' => '\zipMoney\Model\CreateCheckoutRequestFeatures',
-        'metadata' => '\zipMoney\Model\Metadata',
-        'config'   => '\zipMoney\Model\CheckoutConfiguration',
-    ];
+	/**
+	 * The original name of the model.
+	 *
+	 * @var string
+	 */
+	protected static $swaggerModelName = 'CreateCheckoutRequest';
 
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
+	/**
+	 * Array of property to type mappings. Used for (de)serialization
+	 *
+	 * @var string[]
+	 */
+	protected static $zipTypes = array(
+		'type'     => 'string',
+		'shopper'  => '\zipMoney\Model\Shopper',
+		'order'    => '\zipMoney\Model\CheckoutOrder',
+		'features' => '\zipMoney\Model\CreateCheckoutRequestFeatures',
+		'metadata' => '\zipMoney\Model\Metadata',
+		'config'   => '\zipMoney\Model\CheckoutConfiguration',
+	);
 
-    /**
-     * Array of attributes where the key is the local name, and the value is the original name.
-     *
-     * @var string[]
-     */
-    protected static $attributeMap = [
-        'type'     => 'type',
-        'shopper'  => 'shopper',
-        'order'    => 'order',
-        'features' => 'features',
-        'metadata' => 'metadata',
-        'config'   => 'config',
-    ];
+	public static function zipTypes() {
+		 return self::$zipTypes;
+	}
 
-    /**
-     * Array of attributes to setter functions (for deserialization of responses).
-     *
-     * @var string[]
-     */
-    protected static $setters = [
-        'type'     => 'setType',
-        'shopper'  => 'setShopper',
-        'order'    => 'setOrder',
-        'features' => 'setFeatures',
-        'metadata' => 'setMetadata',
-        'config'   => 'setConfig',
-    ];
+	/**
+	 * Array of attributes where the key is the local name, and the value is the original name
+	 *
+	 * @var string[]
+	 */
+	protected static $attributeMap = array(
+		'type'     => 'type',
+		'shopper'  => 'shopper',
+		'order'    => 'order',
+		'features' => 'features',
+		'metadata' => 'metadata',
+		'config'   => 'config',
+	);
 
-    /**
-     * Array of attributes to getter functions (for serialization of requests).
-     *
-     * @var string[]
-     */
-    protected static $getters = [
-        'type'     => 'getType',
-        'shopper'  => 'getShopper',
-        'order'    => 'getOrder',
-        'features' => 'getFeatures',
-        'metadata' => 'getMetadata',
-        'config'   => 'getConfig',
-    ];
 
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = array(
+		'type'     => 'setType',
+		'shopper'  => 'setShopper',
+		'order'    => 'setOrder',
+		'features' => 'setFeatures',
+		'metadata' => 'setMetadata',
+		'config'   => 'setConfig',
+	);
 
-    public static function setters()
-    {
-        return self::$setters;
-    }
 
-    public static function getters()
-    {
-        return self::$getters;
-    }
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = array(
+		'type'     => 'getType',
+		'shopper'  => 'getShopper',
+		'order'    => 'getOrder',
+		'features' => 'getFeatures',
+		'metadata' => 'getMetadata',
+		'config'   => 'getConfig',
+	);
 
-    public const TYPE_STANDARD = 'standard';
-    public const TYPE_EXPRESS = 'express';
+	public static function attributeMap() {
+		 return self::$attributeMap;
+	}
 
-    /**
-     * Gets allowable values of the enum.
-     *
-     * @return string[]
-     */
-    public function getTypeAllowableValues()
-    {
-        return [
-            self::TYPE_STANDARD,
-            self::TYPE_EXPRESS,
-        ];
-    }
+	public static function setters() {
+		return self::$setters;
+	}
 
-    /**
-     * Associative array for storing property values.
-     *
-     * @var mixed[]
-     */
-    protected $container = [];
+	public static function getters() {
+		return self::$getters;
+	}
 
-    /**
-     * Constructor.
-     *
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['type'] = isset($data['type']) ? $data['type'] : 'standard';
-        $this->container['shopper'] = isset($data['shopper']) ? $data['shopper'] : null;
-        $this->container['order'] = isset($data['order']) ? $data['order'] : null;
-        $this->container['features'] = isset($data['features']) ? $data['features'] : null;
-        $this->container['metadata'] = isset($data['metadata']) ? $data['metadata'] : null;
-        $this->container['config'] = isset($data['config']) ? $data['config'] : null;
-    }
+	const TYPE_STANDARD = 'standard';
+	const TYPE_EXPRESS  = 'express';
 
-    /**
-     * show all the invalid properties with reasons.
-     *
-     * @return array invalid properties with reasons
-     */
-    public function listInvalidProperties()
-    {
-        $invalid_properties = [];
 
-        $allowed_values = ['standard', 'express'];
-        if (!in_array($this->container['type'], $allowed_values)) {
-            $invalid_properties[] = "invalid value for 'type', must be one of 'standard', 'express'.";
-        }
 
-        if ($this->container['order'] === null) {
-            $invalid_properties[] = "'order' can't be null";
-        }
-        if ($this->container['config'] === null) {
-            $invalid_properties[] = "'config' can't be null";
-        }
+	/**
+	 * Gets allowable values of the enum
+	 *
+	 * @return string[]
+	 */
+	public function getTypeAllowableValues() {
+		return array(
+			self::TYPE_STANDARD,
+			self::TYPE_EXPRESS,
+		);
+	}
 
-        return $invalid_properties;
-    }
 
-    /**
-     * validate all the properties in the model
-     * return true if all passed.
-     *
-     * @return bool True if all properties are valid
-     */
-    public function valid()
-    {
-        $allowed_values = ['standard', 'express'];
-        if (!in_array($this->container['type'], $allowed_values)) {
-            return false;
-        }
-        if ($this->container['order'] === null) {
-            return false;
-        }
-        if ($this->container['config'] === null) {
-            return false;
-        }
+	/**
+	 * Associative array for storing property values
+	 *
+	 * @var mixed[]
+	 */
+	protected $container = array();
 
-        return true;
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[] $data Associated array of property values initializing the model
+	 */
+	public function __construct( array $data = null ) {
+		 $this->container['type']    = isset( $data['type'] ) ? $data['type'] : 'standard';
+		$this->container['shopper']  = isset( $data['shopper'] ) ? $data['shopper'] : null;
+		$this->container['order']    = isset( $data['order'] ) ? $data['order'] : null;
+		$this->container['features'] = isset( $data['features'] ) ? $data['features'] : null;
+		$this->container['metadata'] = isset( $data['metadata'] ) ? $data['metadata'] : null;
+		$this->container['config']   = isset( $data['config'] ) ? $data['config'] : null;
+	}
 
-    /**
-     * Gets type.
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->container['type'];
-    }
+	/**
+	 * show all the invalid properties with reasons.
+	 *
+	 * @return array invalid properties with reasons
+	 */
+	public function listInvalidProperties() {
+		$invalid_properties = array();
 
-    /**
-     * Sets type.
-     *
-     * @param string $type The checkout type.
-     *
-     * @return $this
-     */
-    public function setType($type)
-    {
-        $allowed_values = ['standard', 'express'];
-        if (!is_null($type) && (!in_array($type, $allowed_values))) {
-            throw new \InvalidArgumentException("Invalid value for 'type', must be one of 'standard', 'express'");
-        }
-        $this->container['type'] = $type;
+		$allowed_values = array( 'standard', 'express' );
+		if ( ! in_array( $this->container['type'], $allowed_values ) ) {
+			$invalid_properties[] = "invalid value for 'type', must be one of 'standard', 'express'.";
+		}
 
-        return $this;
-    }
+		if ( $this->container['order'] === null ) {
+			$invalid_properties[] = "'order' can't be null";
+		}
+		if ( $this->container['config'] === null ) {
+			$invalid_properties[] = "'config' can't be null";
+		}
+		return $invalid_properties;
+	}
 
-    /**
-     * Gets shopper.
-     *
-     * @return \zipMoney\Model\Shopper
-     */
-    public function getShopper()
-    {
-        return $this->container['shopper'];
-    }
+	/**
+	 * validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		$allowed_values = array( 'standard', 'express' );
+		if ( ! in_array( $this->container['type'], $allowed_values ) ) {
+			return false;
+		}
+		if ( $this->container['order'] === null ) {
+			return false;
+		}
+		if ( $this->container['config'] === null ) {
+			return false;
+		}
+		return true;
+	}
 
-    /**
-     * Sets shopper.
-     *
-     * @param \zipMoney\Model\Shopper $shopper
-     *
-     * @return $this
-     */
-    public function setShopper($shopper)
-    {
-        $this->container['shopper'] = $shopper;
 
-        return $this;
-    }
+	/**
+	 * Gets type
+	 *
+	 * @return string
+	 */
+	public function getType() {
+		 return $this->container['type'];
+	}
 
-    /**
-     * Gets order.
-     *
-     * @return \zipMoney\Model\CheckoutOrder
-     */
-    public function getOrder()
-    {
-        return $this->container['order'];
-    }
+	/**
+	 * Sets type
+	 *
+	 * @param string $type The checkout type.
+	 * @return $this
+	 */
+	public function setType( $type ) {
+		$allowed_values = array( 'standard', 'express' );
+		if ( ! is_null( $type ) && ( ! in_array( $type, $allowed_values ) ) ) {
+			throw new \InvalidArgumentException( "Invalid value for 'type', must be one of 'standard', 'express'" );
+		}
+		$this->container['type'] = $type;
 
-    /**
-     * Sets order.
-     *
-     * @param \zipMoney\Model\CheckoutOrder $order
-     *
-     * @return $this
-     */
-    public function setOrder($order)
-    {
-        $this->container['order'] = $order;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Gets shopper
+	 *
+	 * @return \zipMoney\Model\Shopper
+	 */
+	public function getShopper() {
+		return $this->container['shopper'];
+	}
 
-    /**
-     * Gets features.
-     *
-     * @return \zipMoney\Model\CreateCheckoutRequestFeatures
-     */
-    public function getFeatures()
-    {
-        return $this->container['features'];
-    }
+	/**
+	 * Sets shopper
+	 *
+	 * @param \zipMoney\Model\Shopper $shopper
+	 * @return $this
+	 */
+	public function setShopper( $shopper ) {
+		$this->container['shopper'] = $shopper;
 
-    /**
-     * Sets features.
-     *
-     * @param \zipMoney\Model\CreateCheckoutRequestFeatures $features
-     *
-     * @return $this
-     */
-    public function setFeatures($features)
-    {
-        $this->container['features'] = $features;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Gets order
+	 *
+	 * @return \zipMoney\Model\CheckoutOrder
+	 */
+	public function getOrder() {
+		return $this->container['order'];
+	}
 
-    /**
-     * Gets metadata.
-     *
-     * @return \zipMoney\Model\Metadata
-     */
-    public function getMetadata()
-    {
-        return $this->container['metadata'];
-    }
+	/**
+	 * Sets order
+	 *
+	 * @param \zipMoney\Model\CheckoutOrder $order
+	 * @return $this
+	 */
+	public function setOrder( $order ) {
+		$this->container['order'] = $order;
 
-    /**
-     * Sets metadata.
-     *
-     * @param \zipMoney\Model\Metadata $metadata
-     *
-     * @return $this
-     */
-    public function setMetadata($metadata)
-    {
-        $this->container['metadata'] = $metadata;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Gets features
+	 *
+	 * @return \zipMoney\Model\CreateCheckoutRequestFeatures
+	 */
+	public function getFeatures() {
+		 return $this->container['features'];
+	}
 
-    /**
-     * Gets config.
-     *
-     * @return \zipMoney\Model\CheckoutConfiguration
-     */
-    public function getConfig()
-    {
-        return $this->container['config'];
-    }
+	/**
+	 * Sets features
+	 *
+	 * @param \zipMoney\Model\CreateCheckoutRequestFeatures $features
+	 * @return $this
+	 */
+	public function setFeatures( $features ) {
+		$this->container['features'] = $features;
 
-    /**
-     * Sets config.
-     *
-     * @param \zipMoney\Model\CheckoutConfiguration $config
-     *
-     * @return $this
-     */
-    public function setConfig($config)
-    {
-        $this->container['config'] = $config;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Gets metadata
+	 *
+	 * @return \zipMoney\Model\Metadata
+	 */
+	public function getMetadata() {
+		 return $this->container['metadata'];
+	}
 
-    /**
-     * Returns true if offset exists. False otherwise.
-     *
-     * @param int $offset Offset
-     *
-     * @return bool
-     */
-    public function offsetExists($offset): bool
-    {
-        return isset($this->container[$offset]);
-    }
+	/**
+	 * Sets metadata
+	 *
+	 * @param \zipMoney\Model\Metadata $metadata
+	 * @return $this
+	 */
+	public function setMetadata( $metadata ) {
+		$this->container['metadata'] = $metadata;
 
-    /**
-     * Gets offset.
-     *
-     * @param int $offset Offset
-     *
-     * @return mixed
-     */
-    public function offsetGet($offset): mixed
-    {
-        return $this->container[$offset] ?? null;
-    }
+		return $this;
+	}
 
-    /**
-     * Sets value based on offset.
-     *
-     * @param int   $offset Offset
-     * @param mixed $value  Value to be set
-     */
-    public function offsetSet($offset, $value): void
-    {
-        if (is_null($offset)) {
-            $this->container[] = $value;
-        } else {
-            $this->container[$offset] = $value;
-        }
-    }
+	/**
+	 * Gets config
+	 *
+	 * @return \zipMoney\Model\CheckoutConfiguration
+	 */
+	public function getConfig() {
+		return $this->container['config'];
+	}
 
-    /**
-     * Unsets offset.
-     *
-     * @param int $offset Offset
-     */
-    public function offsetUnset($offset): void
-    {
-        unset($this->container[$offset]);
-    }
+	/**
+	 * Sets config
+	 *
+	 * @param \zipMoney\Model\CheckoutConfiguration $config
+	 * @return $this
+	 */
+	public function setConfig( $config ) {
+		$this->container['config'] = $config;
 
-    /**
-     * Gets the string presentation of the object.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
-        }
+		return $this;
+	}
+	/**
+	 * Returns true if offset exists. False otherwise.
+	 *
+	 * @param  integer $offset Offset
+	 * @return boolean
+	 */
+	public function offsetExists( $offset ) {
+		return isset( $this->container[ $offset ] );
+	}
 
-        return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this));
-    }
+	/**
+	 * Gets offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @return mixed
+	 */
+	public function offsetGet( $offset ) {
+		return isset( $this->container[ $offset ] ) ? $this->container[ $offset ] : null;
+	}
+
+	/**
+	 * Sets value based on offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @param  mixed   $value  Value to be set
+	 * @return void
+	 */
+	public function offsetSet( $offset, $value ) {
+		if ( is_null( $offset ) ) {
+			$this->container[] = $value;
+		} else {
+			$this->container[ $offset ] = $value;
+		}
+	}
+
+	/**
+	 * Unsets offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @return void
+	 */
+	public function offsetUnset( $offset ) {
+		unset( $this->container[ $offset ] );
+	}
+
+	/**
+	 * Gets the string presentation of the object
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		if ( defined( 'JSON_PRETTY_PRINT' ) ) { // use JSON pretty print
+			return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ), JSON_PRETTY_PRINT );
+		}
+
+		return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ) );
+	}
 }
+
+

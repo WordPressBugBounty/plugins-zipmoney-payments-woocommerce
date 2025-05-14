@@ -1,8 +1,6 @@
 <?php
-declare(strict_types=1);
-
 /**
- * ChargeOrder.
+ * ChargeOrder
  *
  * @category Class
  * @package  zipMoney
@@ -10,317 +8,301 @@ declare(strict_types=1);
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 
+
 namespace zipMoney\Model;
 
-use ArrayAccess;
+use \ArrayAccess;
 
-class ChargeOrder implements ArrayAccess
-{
-    public const DISCRIMINATOR = 'subclass';
+class ChargeOrder implements ArrayAccess {
 
-    /**
-     * The original name of the model.
-     *
-     * @var string
-     */
-    protected static $swaggerModelName = 'ChargeOrder';
+	const DISCRIMINATOR = 'subclass';
 
-    /**
-     * Array of property to type mappings. Used for (de)serialization.
-     *
-     * @var string[]
-     */
-    protected static $zipTypes = [
-        'reference'      => 'string',
-        'shipping'       => '\zipMoney\Model\OrderShipping',
-        'items'          => '\zipMoney\Model\OrderItem[]',
-        'cart_reference' => 'string',
-    ];
+	/**
+	 * The original name of the model.
+	 *
+	 * @var string
+	 */
+	protected static $swaggerModelName = 'ChargeOrder';
 
-    public static function zipTypes()
-    {
-        return self::$zipTypes;
-    }
+	/**
+	 * Array of property to type mappings. Used for (de)serialization
+	 *
+	 * @var string[]
+	 */
+	protected static $zipTypes = array(
+		'reference'      => 'string',
+		'shipping'       => '\zipMoney\Model\OrderShipping',
+		'items'          => '\zipMoney\Model\OrderItem[]',
+		'cart_reference' => 'string',
+	);
 
-    /**
-     * Array of attributes where the key is the local name, and the value is the original name.
-     *
-     * @var string[]
-     */
-    protected static $attributeMap = [
-        'reference'      => 'reference',
-        'shipping'       => 'shipping',
-        'items'          => 'items',
-        'cart_reference' => 'cart_reference',
-    ];
+	public static function zipTypes() {
+		 return self::$zipTypes;
+	}
 
-    /**
-     * Array of attributes to setter functions (for deserialization of responses).
-     *
-     * @var string[]
-     */
-    protected static $setters = [
-        'reference'      => 'setReference',
-        'shipping'       => 'setShipping',
-        'items'          => 'setItems',
-        'cart_reference' => 'setCartReference',
-    ];
+	/**
+	 * Array of attributes where the key is the local name, and the value is the original name
+	 *
+	 * @var string[]
+	 */
+	protected static $attributeMap = array(
+		'reference'      => 'reference',
+		'shipping'       => 'shipping',
+		'items'          => 'items',
+		'cart_reference' => 'cart_reference',
+	);
 
-    /**
-     * Array of attributes to getter functions (for serialization of requests).
-     *
-     * @var string[]
-     */
-    protected static $getters = [
-        'reference'      => 'getReference',
-        'shipping'       => 'getShipping',
-        'items'          => 'getItems',
-        'cart_reference' => 'getCartReference',
-    ];
 
-    public static function attributeMap()
-    {
-        return self::$attributeMap;
-    }
+	/**
+	 * Array of attributes to setter functions (for deserialization of responses)
+	 *
+	 * @var string[]
+	 */
+	protected static $setters = array(
+		'reference'      => 'setReference',
+		'shipping'       => 'setShipping',
+		'items'          => 'setItems',
+		'cart_reference' => 'setCartReference',
+	);
 
-    public static function setters()
-    {
-        return self::$setters;
-    }
 
-    public static function getters()
-    {
-        return self::$getters;
-    }
+	/**
+	 * Array of attributes to getter functions (for serialization of requests)
+	 *
+	 * @var string[]
+	 */
+	protected static $getters = array(
+		'reference'      => 'getReference',
+		'shipping'       => 'getShipping',
+		'items'          => 'getItems',
+		'cart_reference' => 'getCartReference',
+	);
 
-    /**
-     * Associative array for storing property values.
-     *
-     * @var mixed[]
-     */
-    protected $container = [];
+	public static function attributeMap() {
+		 return self::$attributeMap;
+	}
 
-    /**
-     * Constructor.
-     *
-     * @param mixed[] $data Associated array of property values initializing the model
-     */
-    public function __construct(array $data = null)
-    {
-        $this->container['reference'] = isset($data['reference']) ? $data['reference'] : null;
-        $this->container['shipping'] = isset($data['shipping']) ? $data['shipping'] : null;
-        $this->container['items'] = isset($data['items']) ? $data['items'] : null;
-        $this->container['cart_reference'] = isset($data['cart_reference']) ? $data['cart_reference'] : null;
-    }
+	public static function setters() {
+		return self::$setters;
+	}
 
-    /**
-     * show all the invalid properties with reasons.
-     *
-     * @return array invalid properties with reasons
-     */
-    public function listInvalidProperties()
-    {
-        $invalid_properties = [];
+	public static function getters() {
+		return self::$getters;
+	}
 
-        if (!is_null($this->container['reference']) && (strlen($this->container['reference']) > 50)) {
-            $invalid_properties[] = "invalid value for 'reference', the character length must be smaller than or equal to 50.";
-        }
 
-        if ($this->container['shipping'] === null) {
-            $invalid_properties[] = "'shipping' can't be null";
-        }
-        if (!is_null($this->container['cart_reference']) && (strlen($this->container['cart_reference']) > 100)) {
-            $invalid_properties[] = "invalid value for 'cart_reference', the character length must be smaller than or equal to 100.";
-        }
 
-        return $invalid_properties;
-    }
 
-    /**
-     * validate all the properties in the model
-     * return true if all passed.
-     *
-     * @return bool True if all properties are valid
-     */
-    public function valid()
-    {
-        if (strlen($this->container['reference']) > 50) {
-            return false;
-        }
-        if ($this->container['shipping'] === null) {
-            return false;
-        }
-        if (strlen($this->container['cart_reference']) > 100) {
-            return false;
-        }
 
-        return true;
-    }
+	/**
+	 * Associative array for storing property values
+	 *
+	 * @var mixed[]
+	 */
+	protected $container = array();
 
-    /**
-     * Gets reference.
-     *
-     * @return string
-     */
-    public function getReference()
-    {
-        return $this->container['reference'];
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param mixed[] $data Associated array of property values initializing the model
+	 */
+	public function __construct( array $data = null ) {
+		 $this->container['reference']     = isset( $data['reference'] ) ? $data['reference'] : null;
+		$this->container['shipping']       = isset( $data['shipping'] ) ? $data['shipping'] : null;
+		$this->container['items']          = isset( $data['items'] ) ? $data['items'] : null;
+		$this->container['cart_reference'] = isset( $data['cart_reference'] ) ? $data['cart_reference'] : null;
+	}
 
-    /**
-     * Sets reference.
-     *
-     * @param string $reference The order id in the eCommerce system
-     *
-     * @return $this
-     */
-    public function setReference($reference)
-    {
-        if (!is_null($reference) && (strlen($reference) > 50)) {
-            throw new \InvalidArgumentException('invalid length for $reference when calling ChargeOrder., must be smaller than or equal to 50.');
-        }
+	/**
+	 * show all the invalid properties with reasons.
+	 *
+	 * @return array invalid properties with reasons
+	 */
+	public function listInvalidProperties() {
+		$invalid_properties = array();
 
-        $this->container['reference'] = $reference;
+		if ( ! is_null( $this->container['reference'] ) && ( strlen( $this->container['reference'] ) > 50 ) ) {
+			$invalid_properties[] = "invalid value for 'reference', the character length must be smaller than or equal to 50.";
+		}
 
-        return $this;
-    }
+		if ( $this->container['shipping'] === null ) {
+			$invalid_properties[] = "'shipping' can't be null";
+		}
+		if ( ! is_null( $this->container['cart_reference'] ) && ( strlen( $this->container['cart_reference'] ) > 100 ) ) {
+			$invalid_properties[] = "invalid value for 'cart_reference', the character length must be smaller than or equal to 100.";
+		}
 
-    /**
-     * Gets shipping.
-     *
-     * @return \zipMoney\Model\OrderShipping
-     */
-    public function getShipping()
-    {
-        return $this->container['shipping'];
-    }
+		return $invalid_properties;
+	}
 
-    /**
-     * Sets shipping.
-     *
-     * @param \zipMoney\Model\OrderShipping $shipping
-     *
-     * @return $this
-     */
-    public function setShipping($shipping)
-    {
-        $this->container['shipping'] = $shipping;
+	/**
+	 * validate all the properties in the model
+	 * return true if all passed
+	 *
+	 * @return bool True if all properties are valid
+	 */
+	public function valid() {
+		if ( strlen( $this->container['reference'] ) > 50 ) {
+			return false;
+		}
+		if ( $this->container['shipping'] === null ) {
+			return false;
+		}
+		if ( strlen( $this->container['cart_reference'] ) > 100 ) {
+			return false;
+		}
+		return true;
+	}
 
-        return $this;
-    }
 
-    /**
-     * Gets items.
-     *
-     * @return \zipMoney\Model\OrderItem[]
-     */
-    public function getItems()
-    {
-        return $this->container['items'];
-    }
+	/**
+	 * Gets reference
+	 *
+	 * @return string
+	 */
+	public function getReference() {
+		return $this->container['reference'];
+	}
 
-    /**
-     * Sets items.
-     *
-     * @param \zipMoney\Model\OrderItem[] $items The order item breakdown
-     *
-     * @return $this
-     */
-    public function setItems($items)
-    {
-        $this->container['items'] = $items;
+	/**
+	 * Sets reference
+	 *
+	 * @param string $reference The order id in the eCommerce system
+	 * @return $this
+	 */
+	public function setReference( $reference ) {
+		if ( ! is_null( $reference ) && ( strlen( $reference ) > 50 ) ) {
+			throw new \InvalidArgumentException( 'invalid length for $reference when calling ChargeOrder., must be smaller than or equal to 50.' );
+		}
 
-        return $this;
-    }
+		$this->container['reference'] = $reference;
 
-    /**
-     * Gets cart_reference.
-     *
-     * @return string
-     */
-    public function getCartReference()
-    {
-        return $this->container['cart_reference'];
-    }
+		return $this;
+	}
 
-    /**
-     * Sets cart_reference.
-     *
-     * @param string $cart_reference The shopping cart reference id
-     *
-     * @return $this
-     */
-    public function setCartReference($cart_reference)
-    {
-        if (!is_null($cart_reference) && (strlen($cart_reference) > 100)) {
-            throw new \InvalidArgumentException('invalid length for $cart_reference when calling ChargeOrder., must be smaller than or equal to 100.');
-        }
+	/**
+	 * Gets shipping
+	 *
+	 * @return \zipMoney\Model\OrderShipping
+	 */
+	public function getShipping() {
+		 return $this->container['shipping'];
+	}
 
-        $this->container['cart_reference'] = $cart_reference;
+	/**
+	 * Sets shipping
+	 *
+	 * @param \zipMoney\Model\OrderShipping $shipping
+	 * @return $this
+	 */
+	public function setShipping( $shipping ) {
+		$this->container['shipping'] = $shipping;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Returns true if offset exists. False otherwise.
-     *
-     * @param int $offset Offset
-     *
-     * @return bool
-     */
-    public function offsetExists($offset): bool
-    {
-        return isset($this->container[$offset]);
-    }
+	/**
+	 * Gets items
+	 *
+	 * @return \zipMoney\Model\OrderItem[]
+	 */
+	public function getItems() {
+		return $this->container['items'];
+	}
 
-    /**
-     * Gets offset.
-     *
-     * @param int $offset Offset
-     *
-     * @return mixed
-     */
-    public function offsetGet($offset): mixed
-    {
-        return $this->container[$offset] ?? null;
-    }
+	/**
+	 * Sets items
+	 *
+	 * @param \zipMoney\Model\OrderItem[] $items The order item breakdown
+	 * @return $this
+	 */
+	public function setItems( $items ) {
+		$this->container['items'] = $items;
 
-    /**
-     * Sets value based on offset.
-     *
-     * @param int   $offset Offset
-     * @param mixed $value  Value to be set
-     */
-    public function offsetSet($offset, $value): void
-    {
-        if (is_null($offset)) {
-            $this->container[] = $value;
-        } else {
-            $this->container[$offset] = $value;
-        }
-    }
+		return $this;
+	}
 
-    /**
-     * Unsets offset.
-     *
-     * @param int $offset Offset
-     */
-    public function offsetUnset($offset): void
-    {
-        unset($this->container[$offset]);
-    }
+	/**
+	 * Gets cart_reference
+	 *
+	 * @return string
+	 */
+	public function getCartReference() {
+		return $this->container['cart_reference'];
+	}
 
-    /**
-     * Gets the string presentation of the object.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
-            return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
-        }
+	/**
+	 * Sets cart_reference
+	 *
+	 * @param string $cart_reference The shopping cart reference id
+	 * @return $this
+	 */
+	public function setCartReference( $cart_reference ) {
+		if ( ! is_null( $cart_reference ) && ( strlen( $cart_reference ) > 100 ) ) {
+			throw new \InvalidArgumentException( 'invalid length for $cart_reference when calling ChargeOrder., must be smaller than or equal to 100.' );
+		}
 
-        return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this));
-    }
+		$this->container['cart_reference'] = $cart_reference;
+
+		return $this;
+	}
+	/**
+	 * Returns true if offset exists. False otherwise.
+	 *
+	 * @param  integer $offset Offset
+	 * @return boolean
+	 */
+	public function offsetExists( $offset ) {
+		return isset( $this->container[ $offset ] );
+	}
+
+	/**
+	 * Gets offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @return mixed
+	 */
+	public function offsetGet( $offset ) {
+		return isset( $this->container[ $offset ] ) ? $this->container[ $offset ] : null;
+	}
+
+	/**
+	 * Sets value based on offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @param  mixed   $value  Value to be set
+	 * @return void
+	 */
+	public function offsetSet( $offset, $value ) {
+		if ( is_null( $offset ) ) {
+			$this->container[] = $value;
+		} else {
+			$this->container[ $offset ] = $value;
+		}
+	}
+
+	/**
+	 * Unsets offset.
+	 *
+	 * @param  integer $offset Offset
+	 * @return void
+	 */
+	public function offsetUnset( $offset ) {
+		unset( $this->container[ $offset ] );
+	}
+
+	/**
+	 * Gets the string presentation of the object
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		if ( defined( 'JSON_PRETTY_PRINT' ) ) { // use JSON pretty print
+			return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ), JSON_PRETTY_PRINT );
+		}
+
+		return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ) );
+	}
 }
+
+

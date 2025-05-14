@@ -1,58 +1,56 @@
 <?php
-declare(strict_types=1);
 
 /**
- * ConfigurationTest.
+ * ConfigurationTest
  *
  * @category Class
- *
- * @see     https://github.com/zipMoney/merchantapi-php
+ * @package  zipMoney
+ * @author   zipMoney Payments Pty Ltd
+ * @link     https://github.com/zipMoney/merchantapi-php
  */
 
 namespace zipMoney;
 
-class ConfigurationTest extends Setup
-{
-    public function testPlatform()
-    {
-        $config = Configuration::getDefaultConfiguration();
+use \zipMoney\Configuration;
 
-        $config->setPlatform('Magento/1.0.0');
-        $this->assertEquals($config->getPlatform(), 'Magento/1.0.0');
-    }
+class ConfigurationTest extends Setup {
 
-    public function testEnvironment()
-    {
-        $config = Configuration::getDefaultConfiguration();
+	public function testPlatform() {
+		$config = Configuration::getDefaultConfiguration();
 
-        $config->setEnvironment('sandbox');
-        $this->assertEquals($config->getEnvironment(), 'sandbox');
-        $this->assertEquals($config->getHost(), 'https://global-api.sand.au.edge.zip.co/merchant');
+		$config->setPlatform( 'Magento/1.0.0' );
+		$this->assertEquals( $config->getPlatform(), 'Magento/1.0.0' );
+	}
 
-        $config->setEnvironment('production');
-        $this->assertEquals($config->getEnvironment(), 'production');
-        $this->assertEquals($config->getHost(), 'https://global-api.prod.au.edge.zip.co/merchant');
-    }
+	public function testEnvironment() {
+		 $config = Configuration::getDefaultConfiguration();
 
-    public function testApiHeaders()
-    {
-        $config = Configuration::getDefaultConfiguration();
+		$config->setEnvironment( 'sandbox' );
+		$this->assertEquals( $config->getEnvironment(), 'sandbox' );
+		$this->assertEquals( $config->getHost(), 'https://global-api.sand.au.edge.zip.co/merchant' );
 
-        $config->setPlatform('Magento/1.0.0')
-            ->setDefaultHeaders('sandbox');
-        $packageJson = file_get_contents(dirname(__FILE__) . './../composer.json');
-        $data = json_decode($packageJson);
-        $version = $data->version;
+		$config->setEnvironment( 'production' );
+		$this->assertEquals( $config->getEnvironment(), 'production' );
+		$this->assertEquals( $config->getHost(), 'https://global-api.prod.au.edge.zip.co/merchant' );
+	}
 
-        $this->assertEquals($config->getUserAgent(), 'Magento/1.0.0 merchantapi-php/' . $version);
-        $this->assertEquals($config->getDefaultHeaders(), ['Zip-Version' => '2017-03-01']);
-    }
+	public function testApiHeaders() {
+		$config = Configuration::getDefaultConfiguration();
 
-    public function testPackageVersion()
-    {
-        $config = Configuration::getDefaultConfiguration();
-        $packageJson = file_get_contents(dirname(__FILE__) . './../composer.json');
-        $data = json_decode($packageJson);
-        $this->assertEquals($config->getPackageVersion(), $data->version);
-    }
+		$config->setPlatform( 'Magento/1.0.0' )
+			->setDefaultHeaders( 'sandbox' );
+		$packageJson = file_get_contents( dirname( __FILE__ ) . './../composer.json' );
+		$data        = json_decode( $packageJson );
+		$version     = $data->version;
+
+		$this->assertEquals( $config->getUserAgent(), 'Magento/1.0.0 merchantapi-php/' . $version );
+		$this->assertEquals( $config->getDefaultHeaders(), array( 'Zip-Version' => '2017-03-01' ) );
+	}
+
+	public function testPackageVersion() {
+		$config      = Configuration::getDefaultConfiguration();
+		$packageJson = file_get_contents( dirname( __FILE__ ) . './../composer.json' );
+		$data        = json_decode( $packageJson );
+		$this->assertEquals( $config->getPackageVersion(), $data->version );
+	}
 }

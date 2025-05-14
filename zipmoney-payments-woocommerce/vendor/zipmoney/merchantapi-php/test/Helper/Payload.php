@@ -1,250 +1,251 @@
 <?php
-declare(strict_types=1);
 /**
- * Payload.
+ * Payload
  *
  * @category Class
- *
- * @see     https://github.com/zipMoney/merchantapi-php
+ * @package  zipMoney
+ * @author   zipMoney Payments Pty Ltd
+ * @link     https://github.com/zipMoney/merchantapi-php
  */
 
 namespace zipMoney\Helper;
 
-use zipMoney\Model\Address;
-use zipMoney\Model\Authority;
-use zipMoney\Model\CaptureChargeRequest;
-use zipMoney\Model\ChargeOrder;
-use zipMoney\Model\CheckoutConfiguration;
-use zipMoney\Model\CheckoutOrder;
-use zipMoney\Model\CreateChargeRequest as ChargeRequest;
-use zipMoney\Model\CreateCheckoutRequest as CheckoutRequest;
-use zipMoney\Model\CreateRefundRequest as RefundRequest;
-use zipMoney\Model\Metadata;
-use zipMoney\Model\OrderItem;
-use zipMoney\Model\OrderShipping;
-use zipMoney\Model\Shopper;
-use zipMoney\Model\ShopperStatistics;
+use \zipMoney\Model\CreateCheckoutRequest as CheckoutRequest;
+use \zipMoney\Model\CreateChargeRequest as ChargeRequest;
+use \zipMoney\Model\CreateRefundRequest as RefundRequest;
+use \zipMoney\Model\CaptureChargeRequest;
+use \zipMoney\Model\Shopper;
+use \zipMoney\Model\CheckoutOrder;
+use \zipMoney\Model\ChargeOrder;
+use \zipMoney\Model\Authority;
+use \zipMoney\Model\OrderShipping;
+use \zipMoney\Model\OrderShippingTracking;
+use \zipMoney\Model\Address;
+use \zipMoney\Model\OrderItem;
+use \zipMoney\Model\ShopperStatistics;
+use \zipMoney\Model\Metadata;
+use \zipMoney\Model\CheckoutConfiguration;
 
-class Payload
-{
-    /**
-     * @var Mage_Customer_Model_Session
-     */
-    protected $_quote;
+class Payload {
 
-    /**
-     * @var Mage_Customer_Model_Session
-     */
-    protected $_order;
 
-    protected $_checkoutId;
+	/**
+	 * @var Mage_Customer_Model_Session
+	 */
+	protected $_quote;
 
-    protected $_chargeId;
+	/**
+	 * @var Mage_Customer_Model_Session
+	 */
+	protected $_order;
 
-    public function getCheckoutPayload()
-    {
-        $checkoutReq = new CheckoutRequest();
+	protected $_checkoutId;
 
-        $checkoutReq->setType('standard')
-            ->setShopper($this->getShopper())
-            ->setOrder($this->getOrderDetails(new CheckoutOrder))
-            ->setMetadata($this->getMetadata())
-            ->setConfig($this->getCheckoutConfiguration());
+	protected $_chargeId;
 
-        return $checkoutReq;
-    }
 
-    public function getChargePayload()
-    {
-        $chargeReq = new ChargeRequest();
+	public function getCheckoutPayload() {
+		$checkoutReq = new CheckoutRequest();
 
-        $chargeReq->setAmount(100)
-            ->setOrder($this->getOrderDetails(new ChargeOrder))
-            ->setCurrency('AUD')
-            ->setCapture(true)
-            ->setMetadata($this->getMetadata())
-            ->setAuthority($this->getAuthority());
+		$checkoutReq->setType( 'standard' )
+				->setShopper( $this->getShopper() )
+				->setOrder( $this->getOrderDetails( new CheckoutOrder() ) )
+				->setMetadata( $this->getMetadata() )
+				->setConfig( $this->getCheckoutConfiguration() );
 
-        return $chargeReq;
-    }
+		return $checkoutReq;
+	}
 
-    public function getRefundPayload()
-    {
-        $chargeReq = new RefundRequest();
 
-        $chargeReq->setAmount(100)
-            ->setReason('Reason Text')
-            ->setChargeId($this->getChargeId())
-            ->setMetadata($this->getMetadata());
+	public function getChargePayload() {
+		$chargeReq = new ChargeRequest();
 
-        return $chargeReq;
-    }
+		$chargeReq->setAmount( 100 )
+			  ->setOrder( $this->getOrderDetails( new ChargeOrder() ) )
+			  ->setCurrency( 'AUD' )
+			  ->setCapture( true )
+			  ->setMetadata( $this->getMetadata() )
+			  ->setAuthority( $this->getAuthority() );
 
-    public function getCapturePayload()
-    {
-        $captureChargeReq = new CaptureChargeRequest();
+		return $chargeReq;
+	}
 
-        $captureChargeReq->setAmount(100);
+	public function getRefundPayload() {
+		$chargeReq = new RefundRequest();
 
-        return $captureChargeReq;
-    }
+		$chargeReq->setAmount( 100 )
+			  ->setReason( 'Reason Text' )
+			  ->setChargeId( $this->getChargeId() )
+			  ->setMetadata( $this->getMetadata() );
 
-    public function getShopper()
-    {
-        $shopper = new Shopper;
+		return $chargeReq;
+	}
 
-        $shopper->setEmail('test@zipmoney.com.au');
-        $shopper->setFirstName('zipMoney');
-        $shopper->setLastName('Test');
-        $shopper->setGender('Male');
-        //$shopper->setBirthDate("1990-12-12");
-        $shopper->setPhone('+610400000000');
-        $shopper->setTitle('Mr.');
 
-        $statistics = new ShopperStatistics;
+	public function getCapturePayload() {
+		$captureChargeReq = new CaptureChargeRequest();
 
-        $statistics->setAccountCreated('2017-01-01')
-            ->setSalesTotalCount(1000)
-            ->setSalesAvgAmount(100)
-            ->setSalesMaxAmount(500)
-            ->setRefundsTotalAmount(0)
-            ->setPreviousChargeback(false)
-            ->setCurrency('AUD');
-        //             ->setLastLogin("2017-01-01 01:11:00");
+		$captureChargeReq->setAmount( 100 );
 
-        $shopper->setStatistics($statistics);
+		return $captureChargeReq;
+	}
 
-        $address = new Address;
 
-        $address->setFirstName('zipMoney');
-        $address->setLastName('Test');
-        $address->setLine1('50 Test Street');
-        $address->setState('NSW');
-        $address->setCity('Sydney');
-        $address->setCountry('AU');
-        $address->setPostalCode('2000');
+	public function getShopper() {
+		$shopper = new Shopper();
 
-        $shopper->setBillingAddress($address);
+		$shopper->setEmail( 'test@zipmoney.com.au' );
+		$shopper->setFirstName( 'zipMoney' );
+		$shopper->setLastName( 'Test' );
+		$shopper->setGender( 'Male' );
+		// $shopper->setBirthDate("1990-12-12");
+		$shopper->setPhone( '+610400000000' );
+		$shopper->setTitle( 'Mr.' );
 
-        return $shopper;
-    }
+		$statistics = new ShopperStatistics();
 
-    public function getShippingDetails()
-    {
-        return '';
-    }
+		$statistics->setAccountCreated( '2017-01-01' )
+			 ->setSalesTotalCount( 1000 )
+			 ->setSalesAvgAmount( 100 )
+			 ->setSalesMaxAmount( 500 )
+			 ->setRefundsTotalAmount( 0 )
+			 ->setPreviousChargeback( false )
+			 ->setCurrency( 'AUD' );
+		// ->setLastLogin("2017-01-01 01:11:00");
 
-    public function getOrderDetails($reqOrder)
-    {
-        $shipping = new OrderShipping;
+		$shopper->setStatistics( $statistics );
 
-        $address = new Address;
+		$address = new Address();
 
-        $address->setFirstName('zipMoney');
-        $address->setLastName('Test');
-        $address->setLine1('50 Test Street');
-        $address->setState('NSW');
-        $address->setCity('Sydney');
-        $address->setCountry('AU');
-        $address->setPostalCode('2000');
+		$address->setFirstName( 'zipMoney' );
+		$address->setLastName( 'Test' );
+		$address->setLine1( '50 Test Street' );
+		$address->setState( 'NSW' );
+		$address->setCity( 'Sydney' );
+		$address->setCountry( 'AU' );
+		$address->setPostalCode( '2000' );
 
-        $shipping->setAddress($address);
+		$shopper->setBillingAddress( $address );
 
-        $orderItem = new OrderItem;
+		return $shopper;
+	}
 
-        $orderItem->setName('Test Product')
-            ->setAmount(100)
-            ->setReference(120)
-            ->setDescription('Test Description')
-            ->setQuantity(1)
-            ->setType('sku')
-            ->setImageUri('http://imageurl')
-            ->setItemUri('http://itemurl')
-            ->setProductCode('QAS00BB');
+	public function getShippingDetails() {
+		return $shipping;
+	}
 
-        $orderItems = [];
+	public function getOrderDetails( $reqOrder ) {
+		$shipping = new OrderShipping();
 
-        $orderItems[] = $orderItem;
-        // Discount Item
-        $discountItem = new OrderItem;
-        $discountItem->setName('Discount');
-        $discountItem->setAmount(-10);
-        $discountItem->setQuantity(1);
-        $discountItem->setType('discount');
-        $orderItems[] = $discountItem;
+		$address = new Address();
 
-        // Shipping Item
-        $shippingItem = new OrderItem;
-        $shippingItem->setName('Shipping');
-        $shippingItem->setAmount(15);
-        $shippingItem->setType('shipping');
-        $shippingItem->setQuantity(1);
-        $orderItems[] = $shippingItem;
+		$address->setFirstName( 'zipMoney' );
+		$address->setLastName( 'Test' );
+		$address->setLine1( '50 Test Street' );
+		$address->setState( 'NSW' );
+		$address->setCity( 'Sydney' );
+		$address->setCountry( 'AU' );
+		$address->setPostalCode( '2000' );
 
-        // Tax Item
-        $taxItem = new OrderItem;
-        $taxItem->setName('Tax');
-        $taxItem->setAmount(5);
-        $taxItem->setType('tax');
-        $taxItem->setQuantity(1);
+		$shipping->setAddress( $address );
 
-        $orderItems[] = $taxItem;
+		$orderItem = new OrderItem();
 
-        if ($reqOrder instanceof CheckoutOrder) {
-            $reqOrder->setAmount(110)
-                ->setCurrency('AUD');
-        }
+		$orderItem->setName( 'Test Product' )
+			  ->setAmount( 100 )
+			  ->setReference( 120 )
+			  ->setDescription( 'Test Description' )
+			  ->setQuantity( 1 )
+			  ->setType( 'sku' )
+			  ->setImageUri( 'http://imageurl' )
+			  ->setItemUri( 'http://itemurl' )
+			  ->setProductCode( 'QAS00BB' );
 
-        $reqOrder->setShipping($shipping)
-            ->setReference('1000055')
-            ->setCartReference('1111')
-            ->setItems($orderItems);
+		$orderItems = array();
 
-        return $reqOrder;
-    }
+		$orderItems[] = $orderItem;
+		// Discount Item
+		$discountItem = new OrderItem();
+		$discountItem->setName( 'Discount' );
+		$discountItem->setAmount( -10 );
+		$discountItem->setQuantity( 1 );
+		$discountItem->setType( 'discount' );
+		$orderItems[] = $discountItem;
 
-    public function getMetadata()
-    {
-        return new Metadata;
-    }
+		// Shipping Item
+		$shippingItem = new OrderItem();
+		$shippingItem->setName( 'Shipping' );
+		$shippingItem->setAmount( 15 );
+		$shippingItem->setType( 'shipping' );
+		$shippingItem->setQuantity( 1 );
+		$orderItems[] = $shippingItem;
 
-    public function setCheckoutId($checkout_id)
-    {
-        $this->_checkoutId = $checkout_id;
-    }
+		// Tax Item
+		$taxItem = new OrderItem();
+		$taxItem->setName( 'Tax' );
+		$taxItem->setAmount( 5 );
+		$taxItem->setType( 'tax' );
+		$taxItem->setQuantity( 1 );
 
-    public function getCheckoutId()
-    {
-        return $this->_checkoutId;
-    }
+		$orderItems[] = $taxItem;
 
-    public function setChargeId($charge_id)
-    {
-        $this->_chargeId = $charge_id;
-    }
+		if ( $reqOrder instanceof CheckoutOrder ) {
+			$reqOrder->setAmount( 110 )
+			   ->setCurrency( 'AUD' );
+		}
 
-    public function getChargeId()
-    {
-        return $this->_chargeId;
-    }
+		$reqOrder->setShipping( $shipping )
+			 ->setReference( 1000055 )
+			 ->setCartReference( 1111 )
+			 ->setItems( $orderItems );
 
-    public function getAuthority()
-    {
-        $checkout_id = $this->getCheckoutId();
+		return $reqOrder;
+	}
 
-        $authority = new Authority;
-        $authority->setType('checkout_id')
-            ->setValue($checkout_id);
 
-        return $authority;
-    }
+	public function getMetadata() {
+		 $metadata = new Metadata();
 
-    public function getCheckoutConfiguration()
-    {
-        $checkout_config = new CheckoutConfiguration();
+		return $metadata;
+	}
 
-        $checkout_config->setRedirectUri('http://localhost/zipmoneypayment/complete');
+	public function setCheckoutId( $checkout_id ) {
+		 $this->_checkoutId = $checkout_id;
+	}
 
-        return $checkout_config;
-    }
+	public function getCheckoutId() {
+		return $this->_checkoutId;
+	}
+
+
+	public function setChargeId( $charge_id ) {
+		 $this->_chargeId = $charge_id;
+	}
+
+	public function getChargeId() {
+		 return $this->_chargeId;
+	}
+
+
+	public function getAuthority() {
+		$checkout_id = $this->getCheckoutId();
+
+		$authority = new Authority();
+		$authority->setType( 'checkout_id' )
+			  ->setValue( $checkout_id );
+
+		return $authority;
+	}
+
+	public function getCheckoutConfiguration() {
+		$checkout_config = new CheckoutConfiguration();
+
+		$checkout_config->setRedirectUri( 'http://localhost/zipmoneypayment/complete' );
+
+		return $checkout_config;
+
+	}
+
+
 }
+
