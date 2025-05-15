@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
+
 /**
- * ErrorResponseError
+ * ErrorResponseError.
  *
  * @category Class
  * @package  zipMoney
@@ -8,259 +10,273 @@
  * @link     https://github.com/zipMoney/merchantapi-php
  */
 
-
 namespace zipMoney\Model;
 
-use \ArrayAccess;
+use ArrayAccess;
 
-class ErrorResponseError implements ArrayAccess {
+class ErrorResponseError implements ArrayAccess
+{
+    public const DISCRIMINATOR = 'subclass';
 
-	const DISCRIMINATOR = 'subclass';
+    /**
+     * The original name of the model.
+     *
+     * @var string
+     */
+    protected static $swaggerModelName = 'ErrorResponse_error';
 
-	/**
-	 * The original name of the model.
-	 *
-	 * @var string
-	 */
-	protected static $swaggerModelName = 'ErrorResponse_error';
+    /**
+     * Array of property to type mappings. Used for (de)serialization.
+     *
+     * @var string[]
+     */
+    protected static $zipTypes = [
+        'code'    => 'string',
+        'message' => 'string',
+        'details' => '\zipMoney\Model\ErrorResponseErrorDetails[]',
+    ];
 
-	/**
-	 * Array of property to type mappings. Used for (de)serialization
-	 *
-	 * @var string[]
-	 */
-	protected static $zipTypes = array(
-		'code'    => 'string',
-		'message' => 'string',
-		'details' => '\zipMoney\Model\ErrorResponseErrorDetails[]',
-	);
+    public static function zipTypes()
+    {
+        return self::$zipTypes;
+    }
 
-	public static function zipTypes() {
-		 return self::$zipTypes;
-	}
+    /**
+     * Array of attributes where the key is the local name, and the value is the original name.
+     *
+     * @var string[]
+     */
+    protected static $attributeMap = [
+        'code'    => 'code',
+        'message' => 'message',
+        'details' => 'details',
+    ];
 
-	/**
-	 * Array of attributes where the key is the local name, and the value is the original name
-	 *
-	 * @var string[]
-	 */
-	protected static $attributeMap = array(
-		'code'    => 'code',
-		'message' => 'message',
-		'details' => 'details',
-	);
+    /**
+     * Array of attributes to setter functions (for deserialization of responses).
+     *
+     * @var string[]
+     */
+    protected static $setters = [
+        'code'    => 'setCode',
+        'message' => 'setMessage',
+        'details' => 'setDetails',
+    ];
 
+    /**
+     * Array of attributes to getter functions (for serialization of requests).
+     *
+     * @var string[]
+     */
+    protected static $getters = [
+        'code'    => 'getCode',
+        'message' => 'getMessage',
+        'details' => 'getDetails',
+    ];
 
-	/**
-	 * Array of attributes to setter functions (for deserialization of responses)
-	 *
-	 * @var string[]
-	 */
-	protected static $setters = array(
-		'code'    => 'setCode',
-		'message' => 'setMessage',
-		'details' => 'setDetails',
-	);
+    public static function attributeMap()
+    {
+        return self::$attributeMap;
+    }
 
+    public static function setters()
+    {
+        return self::$setters;
+    }
 
-	/**
-	 * Array of attributes to getter functions (for serialization of requests)
-	 *
-	 * @var string[]
-	 */
-	protected static $getters = array(
-		'code'    => 'getCode',
-		'message' => 'getMessage',
-		'details' => 'getDetails',
-	);
+    public static function getters()
+    {
+        return self::$getters;
+    }
 
-	public static function attributeMap() {
-		 return self::$attributeMap;
-	}
+    /**
+     * Associative array for storing property values.
+     *
+     * @var mixed[]
+     */
+    protected $container = [];
 
-	public static function setters() {
-		return self::$setters;
-	}
+    /**
+     * Constructor.
+     *
+     * @param mixed[] $data Associated array of property values initializing the model
+     */
+    public function __construct(array $data = null)
+    {
+        $this->container['code'] = isset($data['code']) ? $data['code'] : null;
+        $this->container['message'] = isset($data['message']) ? $data['message'] : null;
+        $this->container['details'] = isset($data['details']) ? $data['details'] : null;
+    }
 
-	public static function getters() {
-		return self::$getters;
-	}
+    /**
+     * show all the invalid properties with reasons.
+     *
+     * @return array invalid properties with reasons
+     */
+    public function listInvalidProperties()
+    {
+        $invalid_properties = [];
 
+        if ($this->container['code'] === null) {
+            $invalid_properties[] = "'code' can't be null";
+        }
+        if ($this->container['message'] === null) {
+            $invalid_properties[] = "'message' can't be null";
+        }
 
+        return $invalid_properties;
+    }
 
+    /**
+     * validate all the properties in the model
+     * return true if all passed.
+     *
+     * @return bool True if all properties are valid
+     */
+    public function valid()
+    {
+        if ($this->container['code'] === null) {
+            return false;
+        }
+        if ($this->container['message'] === null) {
+            return false;
+        }
 
+        return true;
+    }
 
-	/**
-	 * Associative array for storing property values
-	 *
-	 * @var mixed[]
-	 */
-	protected $container = array();
+    /**
+     * Gets code.
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->container['code'];
+    }
 
-	/**
-	 * Constructor
-	 *
-	 * @param mixed[] $data Associated array of property values initializing the model
-	 */
-	public function __construct( array $data = null ) {
-		 $this->container['code']   = isset( $data['code'] ) ? $data['code'] : null;
-		$this->container['message'] = isset( $data['message'] ) ? $data['message'] : null;
-		$this->container['details'] = isset( $data['details'] ) ? $data['details'] : null;
-	}
+    /**
+     * Sets code.
+     *
+     * @param string $code
+     *
+     * @return $this
+     */
+    public function setCode($code)
+    {
+        $this->container['code'] = $code;
 
-	/**
-	 * show all the invalid properties with reasons.
-	 *
-	 * @return array invalid properties with reasons
-	 */
-	public function listInvalidProperties() {
-		$invalid_properties = array();
+        return $this;
+    }
 
-		if ( $this->container['code'] === null ) {
-			$invalid_properties[] = "'code' can't be null";
-		}
-		if ( $this->container['message'] === null ) {
-			$invalid_properties[] = "'message' can't be null";
-		}
-		return $invalid_properties;
-	}
+    /**
+     * Gets message.
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->container['message'];
+    }
 
-	/**
-	 * validate all the properties in the model
-	 * return true if all passed
-	 *
-	 * @return bool True if all properties are valid
-	 */
-	public function valid() {
-		if ( $this->container['code'] === null ) {
-			return false;
-		}
-		if ( $this->container['message'] === null ) {
-			return false;
-		}
-		return true;
-	}
+    /**
+     * Sets message.
+     *
+     * @param string $message
+     *
+     * @return $this
+     */
+    public function setMessage($message)
+    {
+        $this->container['message'] = $message;
 
+        return $this;
+    }
 
-	/**
-	 * Gets code
-	 *
-	 * @return string
-	 */
-	public function getCode() {
-		 return $this->container['code'];
-	}
+    /**
+     * Gets details.
+     *
+     * @return \zipMoney\Model\ErrorResponseErrorDetails[]
+     */
+    public function getDetails()
+    {
+        return $this->container['details'];
+    }
 
-	/**
-	 * Sets code
-	 *
-	 * @param string $code
-	 * @return $this
-	 */
-	public function setCode( $code ) {
-		$this->container['code'] = $code;
+    /**
+     * Sets details.
+     *
+     * @param \zipMoney\Model\ErrorResponseErrorDetails[] $details
+     *
+     * @return $this
+     */
+    public function setDetails($details)
+    {
+        $this->container['details'] = $details;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets message
-	 *
-	 * @return string
-	 */
-	public function getMessage() {
-		return $this->container['message'];
-	}
+    /**
+     * Returns true if offset exists. False otherwise.
+     *
+     * @param int $offset Offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset): bool
+    {
+        return isset($this->container[$offset]);
+    }
 
-	/**
-	 * Sets message
-	 *
-	 * @param string $message
-	 * @return $this
-	 */
-	public function setMessage( $message ) {
-		$this->container['message'] = $message;
+    /**
+     * Gets offset.
+     *
+     * @param int $offset Offset
+     *
+     * @return mixed
+     */
+    public function offsetGet($offset): mixed
+    {
+        return $this->container[$offset] ?? null;
+    }
 
-		return $this;
-	}
+    /**
+     * Sets value based on offset.
+     *
+     * @param int   $offset Offset
+     * @param mixed $value  Value to be set
+     */
+    public function offsetSet($offset, $value): void
+    {
+        if (is_null($offset)) {
+            $this->container[] = $value;
+        } else {
+            $this->container[$offset] = $value;
+        }
+    }
 
-	/**
-	 * Gets details
-	 *
-	 * @return \zipMoney\Model\ErrorResponseErrorDetails[]
-	 */
-	public function getDetails() {
-		return $this->container['details'];
-	}
+    /**
+     * Unsets offset.
+     *
+     * @param int $offset Offset
+     */
+    public function offsetUnset($offset): void
+    {
+        unset($this->container[$offset]);
+    }
 
-	/**
-	 * Sets details
-	 *
-	 * @param \zipMoney\Model\ErrorResponseErrorDetails[] $details
-	 * @return $this
-	 */
-	public function setDetails( $details ) {
-		$this->container['details'] = $details;
+    /**
+     * Gets the string presentation of the object.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        if (defined('JSON_PRETTY_PRINT')) { // use JSON pretty print
+            return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this), JSON_PRETTY_PRINT);
+        }
 
-		return $this;
-	}
-	/**
-	 * Returns true if offset exists. False otherwise.
-	 *
-	 * @param  integer $offset Offset
-	 * @return boolean
-	 */
-	public function offsetExists( $offset ) {
-		return isset( $this->container[ $offset ] );
-	}
-
-	/**
-	 * Gets offset.
-	 *
-	 * @param  integer $offset Offset
-	 * @return mixed
-	 */
-	public function offsetGet( $offset ) {
-		return isset( $this->container[ $offset ] ) ? $this->container[ $offset ] : null;
-	}
-
-	/**
-	 * Sets value based on offset.
-	 *
-	 * @param  integer $offset Offset
-	 * @param  mixed   $value  Value to be set
-	 * @return void
-	 */
-	public function offsetSet( $offset, $value ) {
-		if ( is_null( $offset ) ) {
-			$this->container[] = $value;
-		} else {
-			$this->container[ $offset ] = $value;
-		}
-	}
-
-	/**
-	 * Unsets offset.
-	 *
-	 * @param  integer $offset Offset
-	 * @return void
-	 */
-	public function offsetUnset( $offset ) {
-		unset( $this->container[ $offset ] );
-	}
-
-	/**
-	 * Gets the string presentation of the object
-	 *
-	 * @return string
-	 */
-	public function __toString() {
-		if ( defined( 'JSON_PRETTY_PRINT' ) ) { // use JSON pretty print
-			return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ), JSON_PRETTY_PRINT );
-		}
-
-		return json_encode( \zipMoney\ObjectSerializer::sanitizeForSerialization( $this ) );
-	}
+        return json_encode(\zipMoney\ObjectSerializer::sanitizeForSerialization($this));
+    }
 }
-
-
