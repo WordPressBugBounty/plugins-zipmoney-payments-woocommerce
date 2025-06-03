@@ -65,7 +65,7 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	const REGION_NZ = 'nz';
 //	const REGION_GB = 'gb';
 //	const REGION_ZA = 'za';
-	const REGION_US = 'us';
+//	const REGION_US = 'us';
 //	const REGION_MX = 'mx';
 //	const REGION_SG = 'sg';
 //	const REGION_CA = 'ca';
@@ -287,7 +287,7 @@ class WC_Zipmoney_Payment_Gateway_Config {
 //					self::REGION_ZA => 'South Africa',
 //					self::REGION_AE => 'United Arab Emirates',
 //					self::REGION_GB => 'United Kingdom',
-					self::REGION_US => 'United States',
+//					self::REGION_US => 'United States',
 				),
 			),
 			self::CONFIG_ENABLE_TOKENISATION          => array(
