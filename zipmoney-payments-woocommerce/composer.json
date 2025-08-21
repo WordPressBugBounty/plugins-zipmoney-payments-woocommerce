@@ -1,6 +1,6 @@
 {
   "name": "zipmoney/woocommerce-zipmoneypayment-apiv2",
-  "version":"2.3.28",
+  "version":"2.3.29",
   "require-dev": {
     "wp-cli/wp-cli" : "^2",
     "webgig/wc-setup" : "master",

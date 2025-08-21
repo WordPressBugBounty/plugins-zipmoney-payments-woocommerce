@@ -15,7 +15,7 @@ class WC_Zipmoney_Payment_Gateway_Config {
 
 	const USER_META_ADMIN_NOTICE = 'zip-admin-notice';
 
-	const LOGO_ZIP = 'https://static.zipmoney.com.au/logo/25px/zip.png';
+	const LOGO_ZIP = 'https://static.zip.co/logo/25px/zip.png';
 
 	const META_CHECKOUT_ID = '_zipmoney_checkout_id';
 	const META_CHARGE_ID   = '_zipmoney_charge_id';

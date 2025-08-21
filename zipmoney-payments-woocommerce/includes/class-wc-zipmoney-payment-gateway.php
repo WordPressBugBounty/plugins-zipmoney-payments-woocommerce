@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.3.28';
+	public $version = '2.3.29';
 
 	public $supports = array( 'products', 'refunds' );
 
@@ -83,11 +83,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	}
 
 	public function get_title() {
-		if ( is_admin() ) {
-			return __( 'Zip now, pay later', 'zippayment' );
-		} else {
-			return "<span data-zm-widget='inline' data-zm-asset='checkouttitle'>" . __( 'Zip now, pay later', 'zippayment' ) . ' </span>';
-		}
+      return __( 'Zip now, pay later', 'zippayment' );
 	}
 
 	public function zip_order_payment_title( $title, $order ) {

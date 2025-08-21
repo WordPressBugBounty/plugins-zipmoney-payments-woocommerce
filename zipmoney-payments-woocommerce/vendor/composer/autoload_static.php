@@ -4,31 +4,33 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7b2292f1674184092ca21a29a479d153 {
+class ComposerStaticInit7b2292f1674184092ca21a29a479d153
+{
+    public static $prefixLengthsPsr4 = array (
+        'z' => 
+        array (
+            'zipMoney\\' => 9,
+        ),
+    );
 
-	public static $prefixLengthsPsr4 = array(
-		'z' =>
-		array(
-			'zipMoney\\' => 9,
-		),
-	);
+    public static $prefixDirsPsr4 = array (
+        'zipMoney\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zipmoney/merchantapi-php/lib',
+        ),
+    );
 
-	public static $prefixDirsPsr4 = array(
-		'zipMoney\\' =>
-		array(
-			0 => __DIR__ . '/..' . '/zipmoney/merchantapi-php/lib',
-		),
-	);
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
 
-	public static function getInitializer( ClassLoader $loader ) {
-		return \Closure::bind(
-			function () use ( $loader ) {
-				$loader->prefixLengthsPsr4 = ComposerStaticInit7b2292f1674184092ca21a29a479d153::$prefixLengthsPsr4;
-				$loader->prefixDirsPsr4    = ComposerStaticInit7b2292f1674184092ca21a29a479d153::$prefixDirsPsr4;
+    public static function getInitializer(ClassLoader $loader)
+    {
+        return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7b2292f1674184092ca21a29a479d153::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7b2292f1674184092ca21a29a479d153::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7b2292f1674184092ca21a29a479d153::$classMap;
 
-			},
-			null,
-			ClassLoader::class
-		);
-	}
+        }, null, ClassLoader::class);
+    }
 }
