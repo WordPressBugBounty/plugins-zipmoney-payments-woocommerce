@@ -142,10 +142,10 @@ class WC_Zipmoney_Payment_Gateway_API_Abstract {
 	/**
 	 * Create the order items
 	 *
-	 * @param WC_Session $WC_Session
+	 * @param WC_Order $order
 	 * @return array
 	 */
-	protected function _get_order_items( WC_Order $order = null ) {
+	protected function _get_order_items( WC_Order $order ) {
 		 $order_items = array();
 
 		foreach ( $order->get_items() as $product_item ) {
@@ -304,7 +304,7 @@ class WC_Zipmoney_Payment_Gateway_API_Abstract {
 	/**
 	 * Retrieve cart total amount regardless of woocommerce version
 	 */
-	protected function _get_cart_total( WC_Order $order = null ) {
+	protected function _get_cart_total( WC_Order $order) {
 		return $order->get_total();
 	}
 

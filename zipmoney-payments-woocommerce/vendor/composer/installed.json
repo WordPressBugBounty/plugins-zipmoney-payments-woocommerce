@@ -1,66 +1,66 @@
 {
-        "packages": [
-                {
-                        "name": "zipmoney/merchantapi-php",
-                        "version": "dev-master",
-                        "version_normalized": "dev-master",
-                        "source": {
-                                "type": "git",
-                                "url": "https://github.com/zipMoney/merchantapi-php.git",
-                                "reference": "4fc3c7db14f11ead6bdee9ae1f04b64167e858bf"
-                        },
-                        "dist": {
-                                "type": "zip",
-                                "url": "https://api.github.com/repos/zipMoney/merchantapi-php/zipball/4fc3c7db14f11ead6bdee9ae1f04b64167e858bf",
-                                "reference": "4fc3c7db14f11ead6bdee9ae1f04b64167e858bf",
-                                "shasum": ""
-                        },
-                        "require": {
-                                "ext-curl": "*",
-                                "ext-json": "*",
-                                "ext-mbstring": "*",
-                                "php": ">=7.3"
-                        },
-                        "require-dev": {
-                                "phpunit/phpunit": "^10",
-                                "squizlabs/php_codesniffer": "~2.6"
-                        },
-                        "time": "2025-02-13T22:24:32+00:00",
-                        "default-branch": true,
-                        "type": "library",
-                        "installation-source": "source",
-                        "autoload": {
-                                "psr-4": {
-                                        "zipMoney\\": "lib/"
-                                }
-                        },
-                        "notification-url": "https://packagist.org/downloads/",
-                        "license": [
-                                "MIT"
-                        ],
-                        "authors": [
-                                {
-                                        "name": "zipMoney Payments Pty Ltd.",
-                                        "homepage": "https://github.com/zipMoney/merchantapi-php"
-                                }
-                        ],
-                        "homepage": "http://zipmoney.com.au",
-                        "keywords": [
-                                "api",
-                                "merchantapi",
-                                "php",
-                                "sdk",
-                                "zipMoney",
-                                "zipPay",
-                                "zipcredit"
-                        ],
-                        "support": {
-                                "issues": "https://github.com/zipMoney/merchantapi-php/issues",
-                                "source": "https://github.com/zipMoney/merchantapi-php/tree/1.0.16"
-                        },
-                        "install-path": "../zipmoney/merchantapi-php"
+    "packages": [
+        {
+            "name": "zipmoney/merchantapi-php",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zipMoney/merchantapi-php.git",
+                "reference": "0f42294dc0b1b92ffa28c727f4d6cc6e6b489219"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zipMoney/merchantapi-php/zipball/0f42294dc0b1b92ffa28c727f4d6cc6e6b489219",
+                "reference": "0f42294dc0b1b92ffa28c727f4d6cc6e6b489219",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10",
+                "squizlabs/php_codesniffer": "~2.6"
+            },
+            "time": "2025-09-08T01:42:41+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "zipMoney\\": "lib/"
                 }
-        ],
-        "dev": false,
-        "dev-package-names": []
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "zipMoney Payments Pty Ltd.",
+                    "homepage": "https://github.com/zipMoney/merchantapi-php"
+                }
+            ],
+            "homepage": "http://zipmoney.com.au",
+            "keywords": [
+                "api",
+                "merchantapi",
+                "php",
+                "sdk",
+                "zipMoney",
+                "zipPay",
+                "zipcredit"
+            ],
+            "support": {
+                "issues": "https://github.com/zipMoney/merchantapi-php/issues",
+                "source": "https://github.com/zipMoney/merchantapi-php/tree/1.0.18"
+            },
+            "install-path": "../zipmoney/merchantapi-php"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
 }
