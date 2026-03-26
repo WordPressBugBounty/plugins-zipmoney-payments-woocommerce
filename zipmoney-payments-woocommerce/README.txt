@@ -3,7 +3,7 @@ Contributors: Zip Co Limited
 Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, zipmoney woocommerce addon , zipmoney payment gateway for woocommerce, zipmoney for woocommerce, zipmoney payment gateway for wordpress, buy now pay later, zippay woocommerce plugin, Own it now, pay later, Zip Co, Zip
 Requires at least: WP 6.5
 Tested up to: 6.8
-Stable tag: 2.3.30
+Stable tag: 2.3.31
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -201,50 +201,83 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * Added new region for zip widget
 
 = 2.3.12 =
-* Support woocommerce block
+* Added WooCommerce Blocks checkout support (React-based payment method integration)
+* Added webpack build pipeline for client-side JavaScript
 
 = 2.3.13 =
-* Plugin tested under wordpress version 5.9
-* fixed Divi plugin Interfering issue
+* Tested with WordPress 5.9
+* Fixed Divi theme plugin interference with Zip checkout
 
 = 2.3.14 =
-* Plugin tested under wordpress version 6.0.1
-* Plugin tested under woocommerce version 6.7.0
-* Added tokenisation feature
+* Added tokenisation — customers can save their Zip account for future purchases
+* Added token encryption/decryption for secure storage
+* Added checkout redirect URL support for tokenised payments
+* Added loading overlay when creating charge with saved token
+* Fixed token removal issue for NZ customers during Zip checkout redirect
+* Fixed CSS and widget rendering on block checkout page
+* Hidden marketing banner settings for non-AU regions
+* Tested with WordPress 6.0.1 and WooCommerce 6.7.0
 
 = 2.3.15 =
-* Fixed currency issue when charge is creating
-* Fixed active plugin issue
+* Fixed currency mismatch — now uses currency from checkout session when creating charge
+* Fixed overlay display issue during payment processing
+* Renamed plugin_activation to zip_plugin_activation to avoid conflicts with other plugins
+* Auto-remove invalid tokens from database
 
 = 2.3.16 =
-* Fixed some security related
+* Fixed security issues — sanitised HTML POST data in payment processing
+* Improved input validation in gateway configuration and widget rendering
+* Fixed coding standards issues
 
 = 2.3.17 =
-* Test plugin with wordpress 6.2 and woocommerce 7.5.1
+* Added Docker development environment for local testing
+* Fixed PHP notification for wc-zipmoney-checkout-js
+* Tested with WordPress 6.2 and WooCommerce 7.5.1
 
 = 2.3.18 =
-* fixed php notification issue for wc-zipmoney-checkout-js
+* Fixed PHP notification for wc-zipmoney-checkout-js enqueue
+
+= 2.3.19 =
+* Added High-Performance Order Storage (HPOS) compatibility
+* Declared custom_order_tables feature compatibility
 
 = 2.3.20 =
-* fixed php notification issue for wc-zipmoney-checkout-js
+* Improved HPOS compatibility in API and charge handling
+* Removed deprecated direct post meta access in favour of WC order methods
 
 = 2.3.21 =
-* Changed an api endpoint
+* Updated Zip API endpoint base URL
 
 = 2.3.22 =
-* Removed legacy changes. Updated region logic
+* Removed legacy settings: CONFIG_DISPLAY_TAGLINE_PRODUCT_PAGE, CONFIG_IS_IFRAME_FLOW
+* Updated widget location on product and cart pages
+* Fixed region detection logic — removed unused countries from dropdown
+
+= 2.3.23 =
+* Updated widget JavaScript implementation (ZES-45)
+* Fixed widget settings initialisation (ZES-46)
 
 = 2.3.26 =
-* Update php sdk lib
+* Updated zipmoney/merchantapi-php SDK library version
 
 = 2.3.27 =
-* Remove US region
+* Removed US region support — plugin now serves AU and NZ only
 
 = 2.3.28 =
-* Fix js bugs
+* Refactored block checkout JavaScript (React component cleanup)
+* Updated Composer dependencies
 
 = 2.3.29 =
-* update merchant api endpoint
+* Updated merchant API endpoint and frontend resource URLs to new Zip domain
+* Fixed PaymentMethodTitle formatting — removed redundant string manipulation
 
 = 2.3.30 =
-* Fix nullable variables issue
+* Fixed nullable variable handling across gateway classes (PHP 8.2+ compatibility)
+
+= 2.3.31 =
+* Enhanced payment processing for WooCommerce block-based checkout (ZES-79)
+* Added process_payment_with_context for block checkout flow (redirect, error handling)
+* Fixed React JSX syntax — class → className, onclick → onClick
+* Declared cart_checkout_blocks feature compatibility
+* Fixed admin JS enqueuing — replaced wc_enqueue_js with wp_add_inline_script
+* Fixed process_payment to return failure array instead of void on error

@@ -1,5 +1,7 @@
 <?php
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
+use Automattic\WooCommerce\StoreApi\Payments\PaymentContext;
+use Automattic\WooCommerce\StoreApi\Payments\PaymentResult;
 
 /**
  * Eway payment method integration
@@ -14,19 +16,67 @@ final class WC_Zipmoney_Payment_Gateway_Blocks_Support extends AbstractPaymentMe
 	 */
 	protected $name = 'zipmoney';
 
+	private $WC_Zipmoney_Payment_Gateway;
+
+	public function __construct() {
+		 require_once plugin_dir_path( __FILE__ ) . '/class-wc-zipmoney-payment-gateway.php';
+		$this->WC_Zipmoney_Payment_Gateway = new WC_Zipmoney_Payment_Gateway();
+	}
+
 	/**
 	 * Initializes the payment method type.
 	 */
 	public function initialize() {
 		$this->settings = get_option( 'woocommerce_zipmoney_settings', array() );
 
+		add_action(
+			'woocommerce_rest_checkout_process_payment_with_context',
+			array( $this, 'process_payment_with_context' ),
+			10,
+			2
+		);
 	}
 
-	private $WC_Zipmoney_Payment_Gateway;
+	/**
+	 * Handles payment processing for the block-based checkout.
+	 * Runs before Legacy.php (priority 999) so it takes over the flow.
+	 *
+	 * @param PaymentContext $context
+	 * @param PaymentResult  $result
+	 */
+	public function process_payment_with_context( PaymentContext $context, PaymentResult &$result ) {
+		if ( $context->payment_method !== $this->name ) {
+			return;
+		}
 
-	public function __construct() {
-		 require_once plugin_dir_path( __FILE__ ) . '/class-wc-zipmoney-payment-gateway.php';
-		$this->WC_Zipmoney_Payment_Gateway = new WC_Zipmoney_Payment_Gateway();
+		$order_id = $context->order->get_id();
+
+		require_once plugin_dir_path( __FILE__ ) . '/controller/class-wc-zipmoney-payment-checkout-controller.php';
+		$checkout_controller = new WC_Zip_Controller_Checkout_Controller( $this->WC_Zipmoney_Payment_Gateway );
+
+		try {
+			// Pass empty array: in blocks checkout the order already holds all customer data.
+			$checkout = $checkout_controller->create_checkout( array(), $order_id );
+		} catch ( \zipMoney\ApiException $exception ) {
+			WC_Zipmoney_Payment_Gateway_Util::log( $exception->getCode() . $exception->getMessage() );
+			$result->set_status( 'failure' );
+			$result->set_payment_details( array( 'errorMessage' => $exception->getMessage() ) );
+			return;
+		}
+
+		if ( isset( $checkout['redirect_uri'] ) && $checkout['result'] === 'success' ) {
+			$result->set_status( 'success' );
+			$result->set_redirect_url( $checkout['redirect_uri'] );
+			$payment_details = array( 'checkoutId' => $checkout['checkout_id'] );
+			if ( isset( $checkout['token'] ) ) {
+				$payment_details['token'] = $checkout['token'];
+			}
+			$result->set_payment_details( $payment_details );
+			return;
+		}
+
+		$result->set_status( 'failure' );
+		$result->set_payment_details( array( 'errorMessage' => $checkout['message'] ?? __( 'Payment error.', 'zippayment' ) ) );
 	}
 
 	/**
@@ -47,7 +97,7 @@ final class WC_Zipmoney_Payment_Gateway_Blocks_Support extends AbstractPaymentMe
 	 * @return array
 	 */
 	public function get_payment_method_data() {
-		 $url                = home_url() . '/?p=zipmoneypayment&route=updatesession';
+		$url                = home_url() . '/?p=zipmoneypayment&route=updatesession';
 		$payment_method_data = array(
 			'title'        => $this->WC_Zipmoney_Payment_Gateway->title,
 			'description'  => $this->WC_Zipmoney_Payment_Gateway->description,

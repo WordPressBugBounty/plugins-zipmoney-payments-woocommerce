@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'zipmoney/woocommerce-zipmoneypayment-apiv2',
-        'pretty_version' => '2.3.30',
-        'version' => '2.3.30.0',
+        'pretty_version' => '2.3.31',
+        'version' => '2.3.31.0',
         'reference' => null,
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
@@ -22,8 +22,8 @@
             'dev_requirement' => false,
         ),
         'zipmoney/woocommerce-zipmoneypayment-apiv2' => array(
-            'pretty_version' => '2.3.30',
-            'version' => '2.3.30.0',
+            'pretty_version' => '2.3.31',
+            'version' => '2.3.31.0',
             'reference' => null,
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',

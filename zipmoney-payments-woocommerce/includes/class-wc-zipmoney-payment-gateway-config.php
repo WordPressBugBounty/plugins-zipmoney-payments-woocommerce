@@ -101,64 +101,28 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	public function __construct( WC_Zipmoney_Payment_Gateway $WC_Zipmoney_Payment_Gateway ) {
 		$this->WC_Zipmoney_Payment_Gateway = $WC_Zipmoney_Payment_Gateway;
 
-		wc_enqueue_js(
-			"jQuery( function( $ ) {
+		add_action( 'admin_enqueue_scripts', function() {
+			$js = "
+            jQuery( function( $ ) {
 
-            if($('.woocommerce_sandbox_enable_option').prop('checked') == true){
-                $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).hide();
-                $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).show();
-                $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').show();
-                $( '.woocommerce_prod_zip_credetail_btn').closest('tr').hide();
-            }else{
-                $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).show();
-                $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).hide();
-                $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').hide();
-                $( '.woocommerce_prod_zip_credetail_btn').closest('tr').show();
-            }
-            
-            if($('.woocommerce_banner_enable').prop('checked') == true){
-                $( '.woocommerce_banner_option' ).closest( 'tr' ).show();
-            }else{
-                $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
-            }
-            if($('#woocommerce_zipmoney_select_region :selected').val() === 'au'){
-                $( '.woocommerce_banner_enable' ).closest( 'tr' ).show();
-                $('.woocommerce_tokenisation_enable_option').closest( 'tr' ).show();
-                $('.woocommerce_iframe_enable_option').closest( 'tr' ).show();
+                if($('.woocommerce_sandbox_enable_option').prop('checked') == true){
+                    $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).hide();
+                    $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).show();
+                    $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').show();
+                    $( '.woocommerce_prod_zip_credetail_btn').closest('tr').hide();
+                }else{
+                    $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).show();
+                    $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).hide();
+                    $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').hide();
+                    $( '.woocommerce_prod_zip_credetail_btn').closest('tr').show();
+                }
+                
                 if($('.woocommerce_banner_enable').prop('checked') == true){
                     $( '.woocommerce_banner_option' ).closest( 'tr' ).show();
                 }else{
                     $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
                 }
-            }else{
-                $( '.woocommerce_banner_enable' ).closest( 'tr' ).hide();
-                $('.woocommerce_tokenisation_enable_option').closest( 'tr' ).hide();
-                $('.woocommerce_iframe_enable_option').closest( 'tr' ).hide();
-                $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
-            }
-            
-
-            $( '.woocommerce_sandbox_enable_option' ).change( function( event ) {
-                var checked = $( event.target ).is( ':checked' );
-                    if(checked){
-                        $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).show();
-                        $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).hide();
-                        $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').show();
-                        $( '.woocommerce_prod_zip_credetail_btn').closest('tr').hide();
-                        $('.woocommerce_sandbox_zip_credetail_btn').attr('value', 'Find your sandbox keys');
-                    }else{
-                        $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).hide();
-                        $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).show();
-                        $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').hide();
-                        $( '.woocommerce_prod_zip_credetail_btn').closest('tr').show();
-                        $('.woocommerce_sandbox_zip_credetail_btn').attr('value', 'Find your production keys');
-                    }
-            });
-
-            $('#woocommerce_zipmoney_select_region').on('change',function(){
-                //Getting Value
-                var selValue = $('#woocommerce_zipmoney_select_region :selected').val();
-                if(selValue === 'au'){
+                if($('#woocommerce_zipmoney_select_region :selected').val() === 'au'){
                     $( '.woocommerce_banner_enable' ).closest( 'tr' ).show();
                     $('.woocommerce_tokenisation_enable_option').closest( 'tr' ).show();
                     $('.woocommerce_iframe_enable_option').closest( 'tr' ).show();
@@ -173,52 +137,90 @@ class WC_Zipmoney_Payment_Gateway_Config {
                     $('.woocommerce_iframe_enable_option').closest( 'tr' ).hide();
                     $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
                 }
-            });
-
-            $( '.woocommerce_banner_enable' ).change( function( event ) {
-                var checked = $( event.target ).is( ':checked' );
-                    if(checked){
-                        $( '.woocommerce_banner_option' ).closest( 'tr' ).show();
+                
+    
+                $( '.woocommerce_sandbox_enable_option' ).change( function( event ) {
+                    var checked = $( event.target ).is( ':checked' );
+                        if(checked){
+                            $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).show();
+                            $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).hide();
+                            $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').show();
+                            $( '.woocommerce_prod_zip_credetail_btn').closest('tr').hide();
+                            $('.woocommerce_sandbox_zip_credetail_btn').attr('value', 'Find your sandbox keys');
+                        }else{
+                            $( '.woocommerce_toggle_sandbox_field' ).closest( 'tr' ).hide();
+                            $( '.woocommerce_toggle_prod_field' ).closest( 'tr' ).show();
+                            $( '.woocommerce_sandbox_zip_credetail_btn').closest('tr').hide();
+                            $( '.woocommerce_prod_zip_credetail_btn').closest('tr').show();
+                            $('.woocommerce_sandbox_zip_credetail_btn').attr('value', 'Find your production keys');
+                        }
+                });
+    
+                $('#woocommerce_zipmoney_select_region').on('change',function(){
+                    //Getting Value
+                    var selValue = $('#woocommerce_zipmoney_select_region :selected').val();
+                    if(selValue === 'au'){
+                        $( '.woocommerce_banner_enable' ).closest( 'tr' ).show();
+                        $('.woocommerce_tokenisation_enable_option').closest( 'tr' ).show();
+                        $('.woocommerce_iframe_enable_option').closest( 'tr' ).show();
+                        if($('.woocommerce_banner_enable').prop('checked') == true){
+                            $( '.woocommerce_banner_option' ).closest( 'tr' ).show();
+                        }else{
+                            $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
+                        }
                     }else{
+                        $( '.woocommerce_banner_enable' ).closest( 'tr' ).hide();
+                        $('.woocommerce_tokenisation_enable_option').closest( 'tr' ).hide();
+                        $('.woocommerce_iframe_enable_option').closest( 'tr' ).hide();
                         $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
                     }
-            });
-
-            $('#woocommerce_zipmoney_check_credentials').click(function () {
-                const elements = document.getElementsByClassName('zip-notice');
-                const zipspinner = document.getElementsByClassName('zip-spinner');
-                while (elements.length > 0) elements[0].remove();
-                var checkValidateBtn = document.getElementById('woocommerce_zipmoney_check_credentials');
-                checkValidateBtn.insertAdjacentHTML('afterend', '<div class=\"zip-spinner\"></div>');
-                $('.zip-spinner').addClass('is-active');
-                var environment = 'production';
-                var privatekey = '';
-                if ($('#woocommerce_zipmoney_sandbox').is(':checked'))
-                {
-                    environment = 'sandbox';
-                    privatekey = $('#woocommerce_zipmoney_sandbox_merchant_private_key').val();
-                }
-                else {
-                    privatekey = $('#woocommerce_zipmoney_merchant_private_key').val();
-                }
-                var data = {
-                    private_key: privatekey,
-                    environment: environment
-                };
-                var url = ZipApiKeyCheckUrl;
-                $.post(url, data, function(response) {
-                    checkValidateBtn.insertAdjacentHTML('afterend', response['message']); //  the html has been sanitised in the api endpoint side 
-                }).always(function(){
-                    while (zipspinner.length > 0) zipspinner[0].remove();
                 });
+    
+                $( '.woocommerce_banner_enable' ).change( function( event ) {
+                    var checked = $( event.target ).is( ':checked' );
+                        if(checked){
+                            $( '.woocommerce_banner_option' ).closest( 'tr' ).show();
+                        }else{
+                            $( '.woocommerce_banner_option' ).closest( 'tr' ).hide();
+                        }
+                });
+    
+                $('#woocommerce_zipmoney_check_credentials').click(function () {
+                    const elements = document.getElementsByClassName('zip-notice');
+                    const zipspinner = document.getElementsByClassName('zip-spinner');
+                    while (elements.length > 0) elements[0].remove();
+                    var checkValidateBtn = document.getElementById('woocommerce_zipmoney_check_credentials');
+                    checkValidateBtn.insertAdjacentHTML('afterend', '<div class=\"zip-spinner\"></div>');
+                    $('.zip-spinner').addClass('is-active');
+                    var environment = 'production';
+                    var privatekey = '';
+                    if ($('#woocommerce_zipmoney_sandbox').is(':checked'))
+                    {
+                        environment = 'sandbox';
+                        privatekey = $('#woocommerce_zipmoney_sandbox_merchant_private_key').val();
+                    }
+                    else {
+                        privatekey = $('#woocommerce_zipmoney_merchant_private_key').val();
+                    }
+                    var data = {
+                        private_key: privatekey,
+                        environment: environment
+                    };
+                    var url = ZipApiKeyCheckUrl;
+                    $.post(url, data, function(response) {
+                        checkValidateBtn.insertAdjacentHTML('afterend', response['message']); //  the html has been sanitised in the api endpoint side 
+                    }).always(function(){
+                        while (zipspinner.length > 0) zipspinner[0].remove();
+                    });
+                });
+    
+                $('.woocommerce_sandbox_zip_credetail_btn').attr('value', 'Find your sandbox keys');
+                $('.woocommerce_prod_zip_credetail_btn').attr('value', 'Find your production keys');
+                $('.check_private_key').attr('value', 'Check Private Key validation');
             });
-
-            $('.woocommerce_sandbox_zip_credetail_btn').attr('value', 'Find your sandbox keys');
-            $('.woocommerce_prod_zip_credetail_btn').attr('value', 'Find your production keys');
-            $('.check_private_key').attr('value', 'Check Private Key validation');
-
-        });"
-		);
+            ";
+			wp_add_inline_script( 'jquery', $js );
+		});
 	}
 
 	// return the admin form fields
