@@ -2,8 +2,9 @@
 Contributors: Zip Co Limited
 Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, zipmoney woocommerce addon , zipmoney payment gateway for woocommerce, zipmoney for woocommerce, zipmoney payment gateway for wordpress, buy now pay later, zippay woocommerce plugin, Own it now, pay later, Zip Co, Zip
 Requires at least: WP 6.5
-Tested up to: 6.8
-Stable tag: 2.3.31
+Tested up to: 7.0
+Requires PHP: 8.0
+Stable tag: 2.3.32
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -281,3 +282,8 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * Declared cart_checkout_blocks feature compatibility
 * Fixed admin JS enqueuing — replaced wc_enqueue_js with wp_add_inline_script
 * Fixed process_payment to return failure array instead of void on error
+
+= 2.3.32 =
+* Fixed PHP 8+ "Undefined array key 1" warning in customer address parsing (ZES-82)
+* Replaced manual explode()/list() query-string parsing with parse_str(), which tolerates value-less keys and decodes all fields
+* Fixed double url-decoding of email and address fields; non-decoded fields (name, city) are now decoded correctly

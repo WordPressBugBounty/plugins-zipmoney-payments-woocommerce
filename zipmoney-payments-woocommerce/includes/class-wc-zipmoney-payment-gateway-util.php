@@ -432,16 +432,15 @@ class WC_Zipmoney_Payment_Gateway_Util {
 	public static function update_customer_details( $post_data ) {
 		$customer_details = array();
 
-		if ( is_array( $post_data ) == false ) {
-			$post_data = explode( '&', $post_data );
-			if ( $post_data ) {
-				foreach ( $post_data as $key => $value ) {
-					list($k, $v)            = explode( '=', $value );
-					$customer_details[ $k ] = $v;
-				}
-			}
-		} else {
+		if ( is_array( $post_data ) ) {
 			$customer_details = $post_data;
+		} else {
+			// $post_data is a URL-encoded query string (e.g. from the
+			// woocommerce_checkout_update_order_review AJAX request). parse_str
+			// splits it on & and =, urldecodes the values and tolerates keys
+			// without a value, avoiding the "Undefined array key 1" warning
+			// the previous list() + explode() approach produced on PHP 8+.
+			parse_str( (string) $post_data, $customer_details );
 		}
 
 		$ship_to_different_address = empty( $customer_details['ship_to_different_address'] ) ? false : true;
@@ -460,18 +459,13 @@ class WC_Zipmoney_Payment_Gateway_Util {
 			'state',
 			'postcode',
 		);
-		$need_decode_address_keys = array( 'email', 'address_1', 'address_2' );
-		$zip_billing_details      = array();
-		$zip_shipping_details     = array();
+		$zip_billing_details  = array();
+		$zip_shipping_details = array();
 
 		// set the billing address
 		foreach ( $address_keys as $address_key ) {
 			$billing_key = 'billing_' . $address_key;
 			if ( isset( $customer_details[ $billing_key ] ) ) {
-				if ( in_array( $address_key, $need_decode_address_keys ) ) {
-					$zip_billing_details[ 'zip_' . $billing_key ] = urldecode( $customer_details[ $billing_key ] );
-					continue;
-				}
 				$zip_billing_details[ 'zip_' . $billing_key ] = $customer_details[ $billing_key ];
 			} elseif ( $address_key == 'country' ) {
 				$zip_billing_details[ 'zip_' . $billing_key ] = 'AU';
@@ -488,10 +482,6 @@ class WC_Zipmoney_Payment_Gateway_Util {
 				$shipping_key = 'shipping_' . $address_key;
 				$billing_key  = 'billing_' . $address_key;
 				if ( isset( $customer_details[ $billing_key ] ) ) {
-					if ( in_array( $address_key, $need_decode_address_keys ) ) {
-						$zip_shipping_details[ 'zip_' . $shipping_key ] = urldecode( $customer_details[ $billing_key ] );
-						continue;
-					}
 					$zip_shipping_details[ 'zip_' . $shipping_key ] = $customer_details[ $billing_key ];
 				} elseif ( $address_key == 'country' ) {
 					$zip_shipping_details[ 'zip_' . $billing_key ] = 'AU';
@@ -504,10 +494,6 @@ class WC_Zipmoney_Payment_Gateway_Util {
 			foreach ( $address_keys as $address_key ) {
 				$shipping_key = 'shipping_' . $address_key;
 				if ( isset( $customer_details[ $shipping_key ] ) ) {
-					if ( in_array( $address_key, $need_decode_address_keys ) ) {
-						$zip_shipping_details[ 'zip_' . $shipping_key ] = urldecode( $customer_details[ $shipping_key ] );
-						continue;
-					}
 					$zip_shipping_details[ 'zip_' . $shipping_key ] = $customer_details[ $shipping_key ];
 				} elseif ( $address_key == 'country' ) {
 					$zip_shipping_details[ 'zip_' . $shipping_key ] = 'AU';

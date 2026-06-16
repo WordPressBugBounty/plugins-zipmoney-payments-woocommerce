@@ -889,12 +889,15 @@ class Configuration
      */
     public function getPackageVersion()
     {
-        $package_config = file_get_contents(dirname(__FILE__) . './../composer.json');
+        $composer_path = dirname(__FILE__) . '/../composer.json';
 
-        if ($package_config) {
-            $package_config_object = json_decode($package_config);
-            if (is_object($package_config_object) && isset($package_config_object->version)) {
-                return $package_config_object->version;
+        if (is_file($composer_path)) {
+            $package_config = file_get_contents($composer_path);
+            if ($package_config) {
+                $package_config_object = json_decode($package_config);
+                if (is_object($package_config_object) && isset($package_config_object->version)) {
+                    return $package_config_object->version;
+                }
             }
         }
 

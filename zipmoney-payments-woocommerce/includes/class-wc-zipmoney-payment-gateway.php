@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.3.31';
+	public $version = '2.3.32';
 
 	public $supports = array( 'products', 'refunds' );
 
@@ -302,9 +302,9 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 			return;
 		}
 
-		if ( version_compare( phpversion(), '5.3.0', '<' ) ) {
+		if ( version_compare( phpversion(), '8.0', '<' ) ) {
 			// PHP Version
-			echo '<div class="error"><p>' . sprintf( __( 'ZipMoney Error: ZipMoney requires PHP 5.3.0 and above. You are using version %s.', 'zippayment' ), phpversion() ) . '</p></div>';
+			echo '<div class="error"><p>' . sprintf( __( 'ZipMoney Error: ZipMoney requires PHP 8.0 and above. You are using version %s.', 'zippayment' ), phpversion() ) . '</p></div>';
 		} elseif ( is_checkout() && ! is_ssl() ) {
 			// Show message if enabled and FORCE SSL is disabled and WordPressHTTPS plugin is not detected
 			echo '<div class="error"><p>' . sprintf( __( 'WARN: ZipMoney is enabled, but the <a href="%s">force SSL option</a> is disabled; your checkout may not be secure! Please enable SSL and ensure your server has a valid SSL certificate - ZipMoney will only work in sandbox mode.', 'zippayment' ), admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) . '</p></div>';
