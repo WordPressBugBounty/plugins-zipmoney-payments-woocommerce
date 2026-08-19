@@ -4,7 +4,7 @@ Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, z
 Requires at least: WP 6.5
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.3.32
+Stable tag: 2.3.33
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -286,4 +286,10 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 = 2.3.32 =
 * Fixed PHP 8+ "Undefined array key 1" warning in customer address parsing (ZES-82)
 * Replaced manual explode()/list() query-string parsing with parse_str(), which tolerates value-less keys and decodes all fields
-* Fixed double url-decoding of email and address fields; non-decoded fields (name, city) are now decoded correctly
+* Fixed double url-decoding of email and address fields; non-decoded fields (name, city) are now decoded correctly
+
+= 2.3.33 =
+* Updated the Zip PHP SDK to 1.0.21, fixing a fatal error on PHP 8 when a numeric value reached one of the SDK's field-length checks — checkout could break outright (ZES-91)
+* The SDK no longer logs a "failed to open stream" warning on every request while reading its own package version
+* Network failures while talking to Zip now surface as a handled API error instead of a fatal error
+* The SDK dependency is pinned to a released version instead of tracking its development branch, so a given plugin release always ships the same SDK
