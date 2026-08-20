@@ -4,7 +4,7 @@ Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, z
 Requires at least: WP 6.5
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.3.33
+Stable tag: 2.3.34
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -293,3 +293,9 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * The SDK no longer logs a "failed to open stream" warning on every request while reading its own package version
 * Network failures while talking to Zip now surface as a handled API error instead of a fatal error
 * The SDK dependency is pinned to a released version instead of tracking its development branch, so a given plugin release always ships the same SDK
+
+= 2.3.34 =
+* Updated the Zip PHP SDK to 1.0.24 (from 1.0.21). A failed request to Zip is now retried when the server answers with a 5xx, not only when the connection itself fails, with a pause between attempts
+* Refund requests now carry the currency, and captures can be marked as partial
+* Fixed a fatal error in the SDK when Zip returned a file download
+* The plugin package is around 300KB smaller: the SDK no longer ships its own documentation, tests and build tooling

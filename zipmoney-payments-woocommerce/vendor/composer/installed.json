@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "zipmoney/merchantapi-php",
-            "version": "1.0.21",
-            "version_normalized": "1.0.21.0",
+            "version": "1.0.24",
+            "version_normalized": "1.0.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zipMoney/merchantapi-php.git",
-                "reference": "1874be33eae9b103a05a781fc0f4476ea30badd8"
+                "reference": "71884c7b0dea67e9f6c30d21424d33a8ff18a095"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zipMoney/merchantapi-php/zipball/1874be33eae9b103a05a781fc0f4476ea30badd8",
-                "reference": "1874be33eae9b103a05a781fc0f4476ea30badd8",
+                "url": "https://api.github.com/repos/zipMoney/merchantapi-php/zipball/71884c7b0dea67e9f6c30d21424d33a8ff18a095",
+                "reference": "71884c7b0dea67e9f6c30d21424d33a8ff18a095",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 "rector/rector": "^1.2",
                 "squizlabs/php_codesniffer": "^3.0"
             },
-            "time": "2026-08-19T01:43:20+00:00",
+            "time": "2026-08-20T10:31:07+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -57,7 +57,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zipMoney/merchantapi-php/issues",
-                "source": "https://github.com/zipMoney/merchantapi-php/tree/1.0.21"
+                "source": "https://github.com/zipMoney/merchantapi-php/tree/1.0.24"
             },
             "install-path": "../zipmoney/merchantapi-php"
         }
