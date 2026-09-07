@@ -164,6 +164,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * @access public
 	 */
 	public function render_widget_cart() {
+		$this->_enqueue_widget_js();
 		$orderTotal = WC()->cart->get_cart_contents_total() + WC()->cart->get_shipping_total() + WC()->cart->get_taxes_total( false, false );
         $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
         echo '<div class="widget-cart" zm-region="' . $region . '" data-zm-asset="cartwidget" zm-widget="popup"  data-zm-popup-asset="termsdialog" data-zm-price="' . $orderTotal . '" data-zm-symbol="' . get_woocommerce_currency_symbol() . '"></div>';
@@ -254,15 +255,43 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		wp_register_script( 'wc-zipmoney-script-order-button', esc_url( plugins_url( 'assets/js/zip_order_button.js', dirname( __FILE__ ) ) ), array( 'thickbox' ), '2.0.4', true );
 		wp_enqueue_script( 'wc-zipmoney-script-order-button' );
 
-		wp_register_script( 'wc-zipmoney-widget-js', 'https://static.zip.co/lib/js/zm-widget-js/dist/zip-widget.min.js', '2.0.5', true );
-		wp_enqueue_script( 'wc-zipmoney-widget-js' );
 		$WC_Zipmoney_Payment_Gateway_Config = $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config;
+
+		// Registered on every front-end page, enqueued only by the code that
+		// actually prints zm-* markup. Keeping the two together means a new
+		// widget location cannot forget to ask for the script.
+		//
+		// Not in the footer: the bundle is loaded with async, so the block checkout
+		// script and the inline _collectWidgetsEl call in the gateway description
+		// would both run before the Zip global exists. Enqueued from a render hook
+		// it lands in the footer anyway, which is harmless there — the markup is
+		// already in the document and the bundle collects it on load.
+		wp_register_script( 'wc-zipmoney-widget-js', 'https://static.zip.co/lib/js/zm-widget-js/dist/zip-widget.min.js', array(), '2.0.5', false );
+
+		if ( is_checkout() ) {
+			// Checkout renders the merchant root element and the gateway description
+			// unconditionally, and the block checkout receives that description over
+			// the Store API, where none of the render hooks below run.
+			$this->_enqueue_widget_js();
+		}
 
 		if ( $WC_Zipmoney_Payment_Gateway_Config->is_it_iframe_flow() ) {
 			wp_register_script( 'wc-zipmoney-checkout-js', 'https://static.zip.co/checkout/checkout-v1.min.js', '1.0.0', true );
 			wp_enqueue_script( 'wc-zipmoney-checkout-js' );
 		}
 		wp_enqueue_script( 'wc-zipmoney-js' );
+	}
+
+
+	/**
+	 * Enqueue the Zip widget bundle for the current request.
+	 *
+	 * Called from the code paths that print zm-* markup, so "is the script
+	 * needed here" is answered by the rendering itself rather than by a second
+	 * copy of the display rules.
+	 */
+	private function _enqueue_widget_js() {
+		wp_enqueue_script( 'wc-zipmoney-widget-js' );
 	}
 
 
@@ -274,6 +303,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	public function render_widget_product() {
 		$product = wc_get_product();
 		if ( $product ) {
+			$this->_enqueue_widget_js();
 			$price = $product->get_price();
             $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
 			echo '<div class="widget-product" zm-region="'.$region.'"  data-zm-asset="productwidget" data-zm-widget="popup"  data-zm-popup-asset="termsdialog" data-zm-price="' . $price . '" data-zm-symbol="' . get_woocommerce_currency_symbol() . '"></div>';
@@ -287,6 +317,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * @access public
 	 */
 	public function render_widget_general() {
+        $this->_enqueue_widget_js();
         $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
 		echo '<div class="widget-product-cart" zm-region="' .$region . '"  data-zm-asset="productwidget" data-zm-widget="popup"  data-zm-popup-asset="termsdialog"></div>';
 	}
@@ -348,6 +379,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * Renders the widget below add to cart / proceed to checkout button in product or cart pages.
 	 */
 	public function render_tagline() {
+        $this->_enqueue_widget_js();
         echo '<div id="zip-tagline" data-zm-widget="tagline"  data-zm-info="true"></div>';
 	}
 
@@ -358,6 +390,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 	 * @access private
 	 */
 	private function _render_banner() {
+        $this->_enqueue_widget_js();
         $region    = $this->WC_Zipmoney_Payment_Gateway->get_option( WC_Zipmoney_Payment_Gateway_Config::CONFIG_SELECT_REGION );
         echo '<div class="zipmoney-strip-banner" zm-region="' . $region . '" zm-asset="stripbanner"   zm-widget="popup"  zm-popup-asset="termsdialog" ></div>';
     }
@@ -398,6 +431,7 @@ class WC_Zipmoney_Payment_Gateway_Widget {
 		if ( $id != $this->WC_Zipmoney_Payment_Gateway->id ) {
 			return $description;
 		}
+		$this->_enqueue_widget_js();
 		$description = '<span zm-widget=\'inline\' zm-asset=\'checkoutdescription\'></span> <a  id="zipmoney-learn-more" class="zip-hover"  zm-widget="popup"  zm-popup-asset="checkoutdialog">Learn More</a>';
 		// show Save Zip account option in checkout when tokenisation is enable and customer logged in
 		if ( $this->WC_Zipmoney_Payment_Gateway->showSaveAccountInCheckout() ) {

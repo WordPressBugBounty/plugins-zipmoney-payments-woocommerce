@@ -204,7 +204,8 @@ class WC_Zipmoney_Payment_Gateway_Config {
                     }
                     var data = {
                         private_key: privatekey,
-                        environment: environment
+                        environment: environment,
+                        zip_nonce: ZipApiKeyCheckNonce
                     };
                     var url = ZipApiKeyCheckUrl;
                     $.post(url, data, function(response) {

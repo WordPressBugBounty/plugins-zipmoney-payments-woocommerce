@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.3.34';
+	public $version = '2.4.0';
 
 	public $supports = array( 'products', 'refunds' );
 
@@ -335,19 +335,33 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 				if ( isset( $query_vars['data'] ) == false ) {
 					$query_vars['data'] = array();
 				}
-				$this->_handle_charge_request( $query_vars['action_type'] );
+				$action_type = isset( $query_vars['action_type'] ) ? sanitize_text_field( $query_vars['action_type'] ) : '';
+				$this->_handle_charge_request( $action_type );
 				break;
 			case 'error':
 				WC_Zipmoney_Payment_Gateway_Util::show_error_page();
 				break;
 			case 'clear':
-				WC_Zipmoney_Payment_Gateway_Util::log( sanitize_text_field( $_POST ) );
-
 				if ( ! empty( $_POST['checkout_id'] ) ) {
-					delete_option( sanitize_text_field( $_POST['checkout_id'] ) );
+					$checkout_id = sanitize_text_field( wp_unslash( $_POST['checkout_id'] ) );
+					WC_Zipmoney_Payment_Gateway_Util::log( 'Clearing the lookup row of checkout ' . $checkout_id );
+					WC_Zipmoney_Payment_Gateway_Util::delete_checkout_order_id( $checkout_id );
 				}
 				break;
 			case 'key-validation':
+				// The settings screen is the only caller: this sends the merchant's own
+				// private key to Zip and reports back whether Zip accepts it. The route is
+				// public, so the check belongs here rather than on the page printing the form.
+				if ( ! current_user_can( 'manage_woocommerce' ) || ! self::_verify_admin_nonce( 'zip_key_validation' ) ) {
+					wp_send_json(
+						array(
+							'code'    => 403,
+							'message' => __( 'You are not allowed to check the Zip credentials.', 'zippayment' ),
+						),
+						403
+					);
+				}
+
 				$environment = sanitize_text_field( $_POST['environment'] );
 				$privateKey  = sanitize_text_field( $_POST['private_key'] );
 				$result      = $this->key_validation( $environment, $privateKey );
@@ -355,7 +369,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 				break;
 			case 'updatesession':
 				// this route use for setting session for save zip account option wheither it is checked or unchecked
-				$saveZipaccount = sanitize_text_field( $_POST['savezipaccount'] );
+				$saveZipaccount = isset( $_POST['savezipaccount'] ) ? sanitize_text_field( wp_unslash( $_POST['savezipaccount'] ) ) : '';
 				session_status() === PHP_SESSION_ACTIVE ?: session_start();
 				$_SESSION['saveZipAccount'] = $saveZipaccount;
 				$result                     = $result = array(
@@ -451,6 +465,18 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Check the nonce that the admin screens print alongside their Zip actions.
+	 *
+	 * @param string $action Nonce action the screen used.
+	 * @return bool
+	 */
+	private static function _verify_admin_nonce( $action ) {
+		$nonce = isset( $_REQUEST['zip_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['zip_nonce'] ) ) : '';
+
+		return ! empty( $nonce ) && false !== wp_verify_nonce( $nonce, $action );
+	}
+
+	/**
 	 * handle the charge request by custom url call
 	 *
 	 * @param $action_type
@@ -470,8 +496,8 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 				$currency       = get_option( 'woocommerce_currency' );
 				$is_iframe_flow = $this->WC_Zipmoney_Payment_Gateway_Config->is_it_iframe_flow();
 				if ( isset( $_GET['iframe'] ) && $currency != CurrencyUtil::CURRENCY_AUD && $is_iframe_flow ) {
-					$checkoutId  = sanitize_text_field( $_GET['checkoutId'] );
-					$state       = sanitize_text_field( $_GET['result'] );
+					$checkoutId  = isset( $_GET['checkoutId'] ) ? sanitize_text_field( wp_unslash( $_GET['checkoutId'] ) ) : '';
+					$state       = isset( $_GET['result'] ) ? sanitize_text_field( wp_unslash( $_GET['result'] ) ) : '';
 					$redirectUrl = WC_Zipmoney_Payment_Gateway_Util::get_complete_endpoint_url()
 						. '&checkoutId=' . $checkoutId
 						. '&result=' . $state;
@@ -497,15 +523,27 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 				exit;
 				break;
 			case 'capture':
-				$charge_controller->capture_charge( sanitize_text_field( $_POST['zip_order_id'] ) );
-				wp_redirect( $referrer );
-				exit;
-				break;
 			case 'cancel':
-				$charge_controller->cancel_charge( sanitize_text_field( $_POST['zip_order_id'] ) );
+				// Both are driven by the buttons on the order screen, so they carry an
+				// administrator's session. Nothing else may capture or void a charge.
+				if ( ! current_user_can( 'edit_shop_orders' ) || ! self::_verify_admin_nonce( 'zip_charge_action' ) ) {
+					wp_die(
+						esc_html__( 'You are not allowed to act on this Zip charge.', 'zippayment' ),
+						'',
+						array( 'response' => 403 )
+					);
+				}
+
+				$zip_order_id = isset( $_POST['zip_order_id'] ) ? sanitize_text_field( wp_unslash( $_POST['zip_order_id'] ) ) : '';
+
+				if ( 'capture' === $action_type ) {
+					$charge_controller->capture_charge( $zip_order_id );
+				} else {
+					$charge_controller->cancel_charge( $zip_order_id );
+				}
+
 				wp_redirect( $referrer );
 				exit;
-				break;
 		}
 	}
 	/**

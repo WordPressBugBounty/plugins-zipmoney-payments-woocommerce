@@ -4,7 +4,7 @@ Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, z
 Requires at least: WP 6.5
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.3.34
+Stable tag: 2.4.0
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -299,3 +299,9 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * Refund requests now carry the currency, and captures can be marked as partial
 * Fixed a fatal error in the SDK when Zip returned a file download
 * The plugin package is around 300KB smaller: the SDK no longer ships its own documentation, tests and build tooling
+
+= 2.3.35 =
+* The Zip widget script is no longer loaded on every page of the store. It is requested on the pages that print a widget or a banner, and on checkout
+
+= 2.4.0 =
+* Fixed a security issue in the plugin's public endpoints
