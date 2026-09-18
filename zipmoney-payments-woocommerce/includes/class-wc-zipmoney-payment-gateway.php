@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.4.0';
+	public $version = '2.4.1';
 
 	public $supports = array( 'products', 'refunds' );
 
@@ -97,6 +97,12 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 		 require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/compatibility/class-wc-core-compatibility.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/compatibility/abstract-wc-data-compatibility.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/compatibility/class-wc-order-compatibility.php';
+
+		// Before the config: get_admin_form_fields() takes its option keys from the
+		// placement resolver.
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-zipmoney-payment-gateway-widget-placement.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-zipmoney-payment-gateway-widget-markup.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-zipmoney-payment-gateway-widget-root.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-zipmoney-payment-gateway-config.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-zipmoney-payment-gateway-widget.php';

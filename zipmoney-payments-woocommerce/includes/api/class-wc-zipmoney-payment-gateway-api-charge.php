@@ -30,10 +30,11 @@ class WC_Zipmoney_Payment_Gateway_API_Request_Charge extends WC_Zipmoney_Payment
 	 * @param WC_Order $order
 	 * @param $api_key
 	 * @param int      $amount
+	 * @param string   $currency
 	 * @param string   $reason
 	 * @return bool
 	 */
-	public function refund_order_charge( WC_Order $order, $api_key, $amount = 0, $currency, $reason = '' ) {
+	public function refund_order_charge( WC_Order $order, $api_key, $amount, $currency, $reason = '' ) {
 		parent::set_api_key( $api_key );
 
 		try {
