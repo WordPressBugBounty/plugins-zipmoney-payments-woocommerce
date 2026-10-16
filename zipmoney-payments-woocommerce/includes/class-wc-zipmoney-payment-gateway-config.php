@@ -69,14 +69,10 @@ class WC_Zipmoney_Payment_Gateway_Config {
 
 	// region for zip widget
 	const REGION_AU = 'au';
-//	const REGION_NZ = 'nz';
-//	const REGION_GB = 'gb';
-//	const REGION_ZA = 'za';
-//	const REGION_US = 'us';
-//	const REGION_MX = 'mx';
-//	const REGION_SG = 'sg';
-//	const REGION_CA = 'ca';
-//	const REGION_AE = 'ae';
+
+	const WIDGET_REGIONS = array(
+		self::REGION_AU => 'Australia',
+	);
 
 	// Log levels
 	const LOG_LEVEL_ALL   = 1;
@@ -288,17 +284,7 @@ class WC_Zipmoney_Payment_Gateway_Config {
 				'type'     => 'select',
 				'desc_tip' => __( 'Select Region to show proper zip widget in product, cart and checkout page', 'zippayment' ),
 				'default'  => self::REGION_AU,
-				'options'  => array(
-					self::REGION_AU => 'Australia',
-//					self::REGION_CA => 'Canada',
-//					self::REGION_MX => 'Mexico',
-//					self::REGION_NZ => 'New Zealand',
-//					self::REGION_SG => 'Singapore',
-//					self::REGION_ZA => 'South Africa',
-//					self::REGION_AE => 'United Arab Emirates',
-//					self::REGION_GB => 'United Kingdom',
-//					self::REGION_US => 'United States',
-				),
+				'options'  => self::WIDGET_REGIONS,
 			),
 			self::CONFIG_ENABLE_TOKENISATION          => array(
 				'title'       => __( 'Tokenisation', 'zippayment' ),
@@ -484,7 +470,8 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	}
 
 	/**
-	 * The region the Zip widget bundle is given, in the spelling the option stores.
+	 * The region the Zip widget bundle is given: the stored option when the settings still
+	 * offer it, Australia otherwise.
 	 *
 	 * Lower case, and it has to stay lower case. The bundle's region enum is lower case —
 	 * `wt.AU = "au"` in zip-widget.min.js 1.7.0 — and so are the keys of the asset
@@ -503,7 +490,9 @@ class WC_Zipmoney_Payment_Gateway_Config {
 	public function get_widget_region() {
 		$value = $this->WC_Zipmoney_Payment_Gateway->get_option( self::CONFIG_SELECT_REGION );
 
-		return is_scalar( $value ) ? (string) $value : '';
+		$value = is_scalar( $value ) ? (string) $value : '';
+
+		return isset( self::WIDGET_REGIONS[ $value ] ) ? $value : self::REGION_AU;
 	}
 
 	/**

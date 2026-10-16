@@ -4,7 +4,7 @@ Tags: zipmoney payments woocommerce, zipmoney payments module for woocommerce, z
 Requires at least: WP 6.5
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 License: GPLv2 or later License http://www.gnu.org/licenses/gpl-2.0.html
 
 
@@ -315,3 +315,6 @@ To configure the plugin, go to __WooCommerce > Settings__ from the left hand me
 * The cart widget quotes the total the shopper is actually asked for. A store charging a cart fee or a surcharge will see it quote a higher amount than before, matching the total on the page
 * A variable product whose parent price was never re-synced is quoted at its cheapest priced variation instead of showing no widget at all
 * A page can carry both an automatic widget and a [zip_widget] shortcode: both are re-priced when a variation is picked, and the selector never moves the one placed by the shortcode
+
+= 2.4.2 =
+* A store still set to New Zealand now shows the Australian widget straight away, without saving the settings first. Australia is the only widget region the plugin offers

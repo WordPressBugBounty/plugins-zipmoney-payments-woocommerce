@@ -23,7 +23,7 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 	public $title       = 'Zip now, pay later';
 	public $description = 'Own the way you pay';
 
-	public $version = '2.4.1';
+	public $version = '2.4.2';
 
 	public $supports = array( 'products', 'refunds' );
 
@@ -499,17 +499,6 @@ class WC_Zipmoney_Payment_Gateway extends WC_Payment_Gateway {
 		WC_Zipmoney_Payment_Gateway_Util::log( 'Charge process after controller' );
 		switch ( $action_type ) {
 			case 'create':
-				$currency       = get_option( 'woocommerce_currency' );
-				$is_iframe_flow = $this->WC_Zipmoney_Payment_Gateway_Config->is_it_iframe_flow();
-				if ( isset( $_GET['iframe'] ) && $currency != CurrencyUtil::CURRENCY_AUD && $is_iframe_flow ) {
-					$checkoutId  = isset( $_GET['checkoutId'] ) ? sanitize_text_field( wp_unslash( $_GET['checkoutId'] ) ) : '';
-					$state       = isset( $_GET['result'] ) ? sanitize_text_field( wp_unslash( $_GET['result'] ) ) : '';
-					$redirectUrl = WC_Zipmoney_Payment_Gateway_Util::get_complete_endpoint_url()
-						. '&checkoutId=' . $checkoutId
-						. '&result=' . $state;
-					WC_Zipmoney_Payment_Gateway_Util::iframe_redirect_page( $checkoutId, $state, $redirectUrl );
-					exit;
-				}
 				$result = $charge_controller->create_charge( $_GET );
 
 				WC_Zipmoney_Payment_Gateway_Util::log( 'Charge process after controller' );

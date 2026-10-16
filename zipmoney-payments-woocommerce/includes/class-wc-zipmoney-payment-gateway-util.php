@@ -422,18 +422,6 @@ class WC_Zipmoney_Payment_Gateway_Util {
 	}
 
 	/**
-	 * Show the iframe redirect js page
-	 *
-	 * @param $title
-	 * @param $content
-	 * @param $checkoutId
-	 * @param $state
-	 */
-	public static function iframe_redirect_page( $checkoutId, $state, $redirectUrl ) {
-		include plugin_dir_path( dirname( __FILE__ ) ) . 'includes/view/frontend/iframe_redirect.php';
-	}
-
-	/**
 	 * Update the customer details in cart session
 	 *
 	 * @param $post_data

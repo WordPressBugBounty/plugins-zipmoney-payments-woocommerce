@@ -1,7 +1,6 @@
 <?php
 
 use \zipMoney\Api\CheckoutsApi;
-use zipMoney\Model\CurrencyUtil;
 
 class WC_Zip_Controller_Checkout_Controller extends WC_Zip_Controller_Abstract_Controller {
 
@@ -51,19 +50,12 @@ class WC_Zip_Controller_Checkout_Controller extends WC_Zip_Controller_Abstract_C
 			$order_id
 		);
 		if ( isset( $checkout_response ) ) {
-			$WC_Zipmoney_Payment_Gateway_Config = $this->WC_Zipmoney_Payment_Gateway->WC_Zipmoney_Payment_Gateway_Config;
-			$is_iframe_flow                     = $WC_Zipmoney_Payment_Gateway_Config->is_it_iframe_flow();
-			$redirectUri                        = $checkout_response->getUri();
-			$currency                           = get_option( 'woocommerce_currency' );
-			if ( $is_iframe_flow && $currency == CurrencyUtil::CURRENCY_NZD ) {
-				$redirectUri = $checkout_response->getUri() . '&embedded=true';
-			}
 			// save checkout Id into post meta.
 			// $order_id = WC()->session->get('_post_id');
 			// update_post_meta($order_id, WC_Zipmoney_Payment_Gateway_Config::META_CHECKOUT_ID, $checkout_response->getId());
 
 			return array(
-				'redirect_uri' => $redirectUri,
+				'redirect_uri' => $checkout_response->getUri(),
 				'message'      => 'Redirecting to Zip.',
 				'result'       => 'success',
 				'checkout_id'  => $checkout_response->getId(),
